@@ -2,6 +2,7 @@ import express from "express";
 import { setupDatabase } from "./database";
 import { PORT } from "./constants";
 import { createRoutes } from "./routes/routes";
+import { setupAuthenticationStrategies } from "./authentication";
 
 const app = express();
 
@@ -10,13 +11,13 @@ app.use(express.urlencoded({
 }));
 app.use(express.json());
 
+app.use("/api", createRoutes());
 app.get("/", (_req, res) => res.send("Hello from the libary server!"));
+setupAuthenticationStrategies();
 
 setupDatabase()
-    .then(() => console.log("Database setup completed!"))
+    .then(() => console.log("Database setup completed!!"))
     .catch(err => console.log(err));
-
-app.use("/api", createRoutes());
 
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
