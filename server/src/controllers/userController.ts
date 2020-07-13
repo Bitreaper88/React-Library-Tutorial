@@ -1,6 +1,14 @@
 import { Request, Response } from "express";
 import User, { IUser } from "../schemas/User";
 
+const saveUserIfNotExists = async (user: IUser) =>
+    User.findOne({ email: user.email })
+        .then(userFound => {
+            if (userFound)
+                throw new Error("User already registered!");
+            return user.save();
+        });
+
 export const postUserHandler = async (
     req: Request,
     res: Response
@@ -11,9 +19,9 @@ export const postUserHandler = async (
         email,
         password
     });
-    return user.save()
+    return saveUserIfNotExists(user)
         .then(() => res.status(200).send(`User ${name} created!`))
-        .catch(_err => res.status(500).send("Something went wrong"));
+        .catch((err: Error) => res.status(500).send(err.message));
 };
 
 export const getUserHandler = async (
