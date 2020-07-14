@@ -1,12 +1,12 @@
 import React, {useState, ChangeEvent} from "react";
 
 interface ILoginProps {
-    login: (email: string, password: string) => Promise<Response>
-    setAuthenticated: (authenticated: boolean) => void
+    login: (email: string, password: string) => Promise<Response>;
+    setToken: (token: string | null) => void;
 }
 
 export const Login: React.FC<ILoginProps> = props => {
-    const { login, setAuthenticated } = props;
+    const { login, setToken } = props;
     const [formData, setFormData] = useState({
         email: "",
         password: ""
@@ -24,8 +24,7 @@ export const Login: React.FC<ILoginProps> = props => {
             .then(data => {
                 console.log(data)
                 if (data && data.token) {
-                    localStorage.setItem("token", data.token);
-                    setAuthenticated(true);
+                    setToken(data.token)
                 }
             })
             .catch(err => {

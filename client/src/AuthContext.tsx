@@ -1,10 +1,13 @@
 import {createContext, useContext} from "react";
 import {API_URL} from "./constants";
+import {IUser} from "./types";
 
 interface IAuthContext {
     authenticated: boolean;
     login: (email: string, password: string) => Promise<Response>;
-    logout: () => Promise<Response|void>;
+    logout: (token: string|null) => Promise<Response|void>;
+    user: IUser | null;
+    token: string | null;
 }
 
 
@@ -16,10 +19,8 @@ const login = (email: string, password: string) => fetch(`${API_URL}/login`, {
     body: JSON.stringify({email, password})
 });
 
-const logout = () => {
-    const token = localStorage.getItem("token");
+const logout = (token: string|null) => {
     if (token) {
-        localStorage.removeItem("token");
         return fetch(`${API_URL}/logout`, {
             method: "POST"
         });
@@ -32,7 +33,9 @@ const logout = () => {
 const AuthContext = createContext<IAuthContext>({
     authenticated: false,
     login,
-    logout
+    logout,
+    token: null,
+    user: null
 });
 
 export const useAuthContext = () => useContext(AuthContext);
