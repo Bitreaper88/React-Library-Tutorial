@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useState} from 'react';
 import './App.css';
+import AuthContext, {useAuthContext} from './AuthContext';
+import {Login} from './Login';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const {login, logout} = useAuthContext();
+    const [authenticated, setAuthenticated] = useState(false);
+
+    return (
+        <AuthContext.Provider value={{
+            authenticated,
+            login,
+            logout
+        }}>
+            <div className="App">
+                <header>
+                    <h1>
+                    Library application!
+                    </h1>
+                </header>
+                <nav>
+                </nav>
+                <main>
+                    <Login setAuthenticated={setAuthenticated} login={login} />
+                    {authenticated && <span>You have logged in and are able to borrow books!</span>}
+                </main>
+                <footer>
+                </footer>
+            </div>
+        </AuthContext.Provider>
+    );
 }
 
 export default App;

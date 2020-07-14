@@ -3,6 +3,7 @@ import { setupDatabase } from "./database";
 import { PORT } from "./constants";
 import { createRoutes } from "./routes/routes";
 import { setupAuthenticationStrategies } from "./authentication";
+import cors from "cors";
 
 const app = express();
 
@@ -10,6 +11,8 @@ app.use(express.urlencoded({
     extended: true
 }));
 app.use(express.json());
+if (process.env.NODE_ENV !== "production")
+    app.use(cors()); // Needed for development use for production set allowed origins and methods.
 
 app.use("/api", createRoutes());
 app.get("/", (_req, res) => res.send("Hello from the libary server!"));
