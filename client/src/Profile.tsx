@@ -1,4 +1,5 @@
 import React from "react";
+import "./Profile.css";
 import {IUser} from "./types";
 
 interface IProfileProps {
@@ -9,8 +10,10 @@ const Profile: React.FC<IProfileProps> = props => {
     const { user } = props;
     return user ? (
         <div>
-            Hello, <h3>{user.name}</h3>
+            <div>Hello, <strong>{user.name}</strong></div>
+            <div>
             This is your email: <span>{user.email}</span>
+            </div>
         </div>
     ) : null;
 }

@@ -29,9 +29,9 @@ function App() {
 
     useEffect(() => {
         if (authenticated && token) {
-            const {user: id} = jwt.decode(token, {
+            const { id } = jwt.decode(token, {
                 json: true
-            }) as {user: string};
+            }) as {id: string};
             fetchProfile(id).then(setUser)
         }
     }, [authenticated, token])
@@ -54,7 +54,6 @@ function App() {
                 </nav>
                 <main>
                     <Login login={login} setToken={setToken}/>
-                    {authenticated && <span>You have logged in and are able to borrow books!</span>}
                     {authenticated && <Profile user={user} />}
                 </main>
                 <footer>

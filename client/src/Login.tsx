@@ -1,4 +1,5 @@
 import React, {useState, ChangeEvent} from "react";
+import "./Login.css";
 
 interface ILoginProps {
     login: (email: string, password: string) => Promise<Response>;
@@ -41,14 +42,20 @@ export const Login: React.FC<ILoginProps> = props => {
     }
 
     return (
-        <div>
+        <div className="Login">
             <h2>Login</h2>
             <form onSubmit={onLoginClick}>
-                <label>Email:</label>
-                <input type="text" id="email" name="email" onChange={onEmailChange} />
-                <label>Password:</label>
-                <input type="password" id="password" name="password" onChange={onPasswordChange} />
-                <input type="submit" />
+                <div>
+                    <label>Email:</label>
+                    <input type="text" id="email" name="email" onChange={onEmailChange} />
+                </div>  
+                <div>
+                    <label>Password:</label>
+                    <input type="password" id="password" name="password" onChange={onPasswordChange} />
+                </div>
+                <div>
+                    <input type="submit" />
+                </div>
             </form>
         </div>
     )
