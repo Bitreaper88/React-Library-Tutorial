@@ -1,5 +1,6 @@
 import React, {useState, ChangeEvent} from "react";
 import "./Login.css";
+import {setAccessToken} from "./utils";
 
 interface ILoginProps {
     login: (email: string, password: string) => Promise<Response>;
@@ -25,6 +26,7 @@ export const Login: React.FC<ILoginProps> = props => {
             .then(data => {
                 console.log(data)
                 if (data && data.token) {
+                    setAccessToken(data.token)
                     setToken(data.token)
                 }
             })

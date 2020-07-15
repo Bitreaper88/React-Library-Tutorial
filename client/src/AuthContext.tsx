@@ -5,7 +5,8 @@ import {IUser} from "./types";
 interface IAuthContext {
     authenticated: boolean;
     login: (email: string, password: string) => Promise<Response>;
-    logout: (token: string|null) => Promise<Response|void>;
+    logout: (token: string|null, refreshInterval?: NodeJS.Timeout | null) => Promise<Response|void>;
+    refreshToken: () => Promise<string>
     user: IUser | null;
     token: string | null;
 }
@@ -16,13 +17,18 @@ const login = (email: string, password: string) => fetch(`${API_URL}/login`, {
     headers: {
         "Content-Type": "application/json",
     },
+    credentials: "include",
     body: JSON.stringify({email, password})
 });
 
-const logout = (token: string|null) => {
+const logout = (token: string|null, refreshInterval?: NodeJS.Timeout|null) => {
+    if (refreshInterval) {
+        clearInterval(refreshInterval)
+    }
     if (token) {
         return fetch(`${API_URL}/logout`, {
-            method: "POST"
+            method: "POST",
+            credentials: "include"
         });
     }
 
@@ -30,10 +36,22 @@ const logout = (token: string|null) => {
     
 };
 
+const refreshToken = (): Promise<string> =>
+    fetch(`${API_URL}/refreshToken`, {
+        method: "GET",
+        credentials: "include"
+    }).then(response => {
+        if (response.status === 200) {
+            return response.json()
+        }
+        throw new Error("Couldn't refresh token");
+    });
+
 const AuthContext = createContext<IAuthContext>({
     authenticated: false,
     login,
     logout,
+    refreshToken,
     token: null,
     user: null
 });

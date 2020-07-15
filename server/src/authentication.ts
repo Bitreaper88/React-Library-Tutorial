@@ -6,6 +6,10 @@ import { secretOrKey, REFRESH_SECRET } from "./constants";
 import { Request, Response } from "express";
 
 const LocalStrategy = passportLocal.Strategy;
+const JWTStrategy = passportJWT.Strategy;
+const ExtractJwt = passportJWT.ExtractJwt;
+
+// LocalStrategy is used to check that user has provided correct password for logging in.
 const localStartegy = new LocalStrategy({
     usernameField: "email",
     passwordField: "password"
@@ -20,8 +24,7 @@ const localStartegy = new LocalStrategy({
         .catch(err => done(err));
 });
 
-const JWTStrategy = passportJWT.Strategy;
-const ExtractJwt = passportJWT.ExtractJwt;
+// JWTStrategy is used to check if user is authorized to access requested resources.
 const jwtStrategy = new JWTStrategy({
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey 
@@ -37,6 +40,12 @@ const jwtStrategy = new JWTStrategy({
         .catch(err => done(err));
 });
 
+// refreshStrategy is used to check that user has logged in and his refreshToken is still valid.
+// If refreshToken is valid new accessToken can be requested, 
+// accessToken should be requested before it has expired.
+// If refresh has expired or is not valid, user will not be able to access resources.
+// Refresh token is stored in httpOnly cookie so that client javascript cannot access it.
+// It should be sent to the server with every request.
 const refreshStrategy = new JWTStrategy(
     {
         jwtFromRequest: req => 
