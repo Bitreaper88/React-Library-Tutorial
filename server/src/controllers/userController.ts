@@ -29,7 +29,7 @@ export const getUserHandler = async (
     res: Response
 ): Promise<Response> => {
     const { userId } = req.params;
-    return User.findById(userId)
+    return User.findById(userId).select("-password")
         .then(user => user ?
             res.status(200).json(user) :
             res.status(404).send("User not found.")

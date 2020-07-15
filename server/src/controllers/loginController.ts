@@ -1,20 +1,13 @@
 import { Request, Response } from "express";
-import { IUser } from "../schemas/User";
-import passport from "passport";
 import jwt from "jsonwebtoken"; 
+import { AT_EXPIRATION_TIME, REFRESH_SECRET, RT_EXPIRATION_TIME } from "../constants";
+import { authenticate, checkRefreshtoken } from "../authentication";
 
-const authenticate = (req: Request, res: Response): Promise<IUser> => 
-    new Promise((resolve, reject) => {
-    // eslint-disable-next-line
-    passport.authenticate("local", { session: false }, (err: Error, user: IUser) => {
-            if (!user)
-                reject(new Error("Wrong username or password!"));
-            if(err)
-                reject(err);
-            if(user) 
-                resolve(user);
-            
-        })(req, res);
+const setRefreshCookie = (res: Response, refreshToken: string) => 
+    res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        path: "/api/"
     });
 
 export const loginHandler = async (
@@ -22,13 +15,29 @@ export const loginHandler = async (
     res: Response
 ): Promise<Response> => authenticate(req, res)
     .then(user => user ?
-        jwt.sign(
-            {
-                user: user._id, 
-                email: user.email
-            }, 
-            process.env.SECRET_KEY || "SECRET_KEY") :
-        null)
-    .then(token => res.status(200).json({ token }))
+        {
+            token: jwt.sign({ id: user._id }, process.env.SECRET_KEY || "SECRET_KEY", {
+                expiresIn: AT_EXPIRATION_TIME
+            }),
+            refreshToken: jwt.sign({ id: user._id }, REFRESH_SECRET, {
+                expiresIn: RT_EXPIRATION_TIME
+            })
+        } :
+        { token: null, refreshToken: null })
+    .then(tokens => tokens.refreshToken ?
+        setRefreshCookie(res, tokens.refreshToken)
+            .status(200)
+            .json({ token: tokens.token }) : 
+        res.status(403).send("Unauthorized"))
     .catch((err: Error) => res.status(500).send(err.message));
 
+export const logoutHandler = async (
+    req: Request,
+    res: Response
+): Promise<Response> => checkRefreshtoken(req, res).then(_user => {
+    req.logout();
+    return res
+        .clearCookie("refreshToken", { path: "/api/" })
+        .status(200)
+        .send("Logged out");
+}).catch(err => res.status(500).send(err));
