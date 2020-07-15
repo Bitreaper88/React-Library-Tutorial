@@ -77,7 +77,7 @@ function App() {
             setAccessToken(token)
             setToken(token)
         }).catch(err => {
-            console.log("Token not valid or expired. Login to get access.");
+            console.log("Token not valid or expired. Login to get access.", err);
             clearState();
         })
     }, [refreshToken])

@@ -7,7 +7,6 @@ export default (): Router => {
     router.post("/", postUserHandler);
     router.get(
         "/:userId",
-        passport.authenticate("refresh", { session: false }),
         passport.authenticate("jwt", { session: false }),
         getUserHandler
     );

@@ -24,7 +24,8 @@ const localStartegy = new LocalStrategy({
         .catch(err => done(err));
 });
 
-// JWTStrategy is used to check if user is authorized to access requested resources.
+// JWTStrategy is used to check that accessToken is valid and user can access resources.
+// accessToken should only be exchanged with resource server.
 const jwtStrategy = new JWTStrategy({
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey 
@@ -40,12 +41,12 @@ const jwtStrategy = new JWTStrategy({
         .catch(err => done(err));
 });
 
-// refreshStrategy is used to check that user has logged in and his refreshToken is still valid.
-// If refreshToken is valid new accessToken can be requested, 
-// accessToken should be requested before it has expired.
-// If refresh has expired or is not valid, user will not be able to access resources.
+// Refresh token is used to grant access tokens to resource server
 // Refresh token is stored in httpOnly cookie so that client javascript cannot access it.
-// It should be sent to the server with every request.
+// When refreshi token expires, user is logged out. 
+// New access token and refresh token needs to be requested from authorization server.
+// Refresh token  should be only exchanged with authorization server.
+// https://stackoverflow.com/questions/38986005/what-is-the-purpose-of-a-refresh-token
 const refreshStrategy = new JWTStrategy(
     {
         jwtFromRequest: req => 
