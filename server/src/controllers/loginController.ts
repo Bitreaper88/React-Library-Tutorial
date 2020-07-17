@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import jwt from "jsonwebtoken"; 
 import { AT_EXPIRATION_TIME, REFRESH_SECRET, RT_EXPIRATION_TIME } from "../constants";
 import { authenticate, checkRefreshtoken } from "../authentication";
+import { IUser } from "../schemas/User";
+
 
 const setRefreshCookie = (res: Response, refreshToken: string) => 
     res.cookie("refreshToken", refreshToken, {
@@ -10,19 +12,21 @@ const setRefreshCookie = (res: Response, refreshToken: string) =>
         path: "/api/"
     });
 
+const createToken = ( user: IUser ) => ({
+    token: jwt.sign({ id: user._id }, process.env.SECRET_KEY || "SECRET_KEY", {
+        expiresIn: AT_EXPIRATION_TIME
+    }),
+    refreshToken: jwt.sign({ id: user._id }, REFRESH_SECRET, {
+        expiresIn: RT_EXPIRATION_TIME
+    })
+});
+
 export const loginHandler = async (
     req: Request,
     res: Response
 ): Promise<Response> => authenticate(req, res)
     .then(user => user ?
-        {
-            token: jwt.sign({ id: user._id }, process.env.SECRET_KEY || "SECRET_KEY", {
-                expiresIn: AT_EXPIRATION_TIME
-            }),
-            refreshToken: jwt.sign({ id: user._id }, REFRESH_SECRET, {
-                expiresIn: RT_EXPIRATION_TIME
-            })
-        } :
+        createToken(user) :
         { token: null, refreshToken: null })
     .then(tokens => tokens.refreshToken ?
         setRefreshCookie(res, tokens.refreshToken)
