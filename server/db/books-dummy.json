@@ -8,7 +8,7 @@
             "publisher": "Sylvia Beach",
             "pages": 730,
             "description": "Ulysses is a modernist novel by Irish writer James Joyce. It was first serialised in parts in the American journal The Little Review from March 1918 to December 1920 and then published in its entirety in Paris by Sylvia Beach on 2 February 1922, Joyce's 40th birthday.",
-            "instances": [
+            "copies": [
                 {
                     "id": "1",
                     "status": "borrowed_by_user",
@@ -33,7 +33,7 @@
             "pages": 472,
             "description": "JavaScript lies at the heart of almost every modern web application, from social apps to the newest browser-based games. Though simple for beginners to pick up and play with, JavaScript is a flexible, complex language that you can use to build full-scale applications.",
             "website": "http://eloquentjavascript.net/",
-            "instances": [
+            "copies": [
                 {
                     "id": "3",
                     "status": "in_library",
@@ -51,7 +51,7 @@
             "pages": 254,
             "description": "With Learning JavaScript Design Patterns, you'll learn how to write beautiful, structured, and maintainable JavaScript by applying classical and modern design patterns to the language. If you want to keep your code efficient, more manageable, and up-to-date with the latest best practices, this book is for you.",
             "website": "http://www.addyosmani.com/resources/essentialjsdesignpatterns/book/",
-            "instances": [
+            "copies": [
                 {
                     "id": "4",
                     "status": "in_library",
