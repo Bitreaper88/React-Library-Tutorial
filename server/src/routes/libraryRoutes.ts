@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { getBookHandler } from "../controllers/libraryController";
+import { getBook } from "../controllers/libraryController";
 
 export default (): Router => {
     const router = Router();
-    router.get("/:isbn", getBookHandler);
+    router.get("/:isbn", getBook);
     return router;
 };

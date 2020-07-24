@@ -35,7 +35,7 @@
             "website": "http://eloquentjavascript.net/",
             "copies": [
                 {
-                    "id": "3",
+                    "id": "1",
                     "status": "in_library",
                     "home_library": "Varpaisjärven kirjastoauto"
                 }
@@ -53,7 +53,7 @@
             "website": "http://www.addyosmani.com/resources/essentialjsdesignpatterns/book/",
             "copies": [
                 {
-                    "id": "4",
+                    "id": "1",
                     "status": "in_library",
                     "home_library": "Varpaisjärven kirjastoauto"
                 }

@@ -3,7 +3,7 @@ import User, { IUser } from "../schemas/User";
 import books_json from "../../db/books-dummy.json";
 const books = books_json.books;
 
-export const getBookHandler = async (
+export const getBook = async (
     req: Request,
     res: Response
 ): Promise<Response> => {
@@ -16,6 +16,9 @@ export const getBookHandler = async (
         res.status(404).send({ error: "notfound" });
 };
 /*
-export const getBookInstanceHandler = async (
+export const getBookCopyHandler = async (
+
+)
+export const borrowBook = async (
 
 )*/
