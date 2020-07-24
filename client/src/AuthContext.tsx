@@ -11,8 +11,8 @@ interface IAuthContext {
     token: string | null;
 }
 
-
-const login = (email: string, password: string) => fetch(`${API_URL}/login`, {
+export type LoginFn = (email: string, password: string) => Promise<Response>;
+const login: LoginFn = (email, password) => fetch(`${API_URL}/login`, {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
@@ -21,7 +21,8 @@ const login = (email: string, password: string) => fetch(`${API_URL}/login`, {
     body: JSON.stringify({email, password})
 });
 
-const logout = (token: string|null, refreshInterval?: NodeJS.Timeout|null) => {
+export type LogoutFn = (token: string|null, refreshInterval?: NodeJS.Timeout|null) => Promise<void | Response>;
+const logout:LogoutFn = (token, refreshInterval) => {
     if (refreshInterval) {
         clearInterval(refreshInterval)
     }
@@ -33,7 +34,6 @@ const logout = (token: string|null, refreshInterval?: NodeJS.Timeout|null) => {
     }
 
     return Promise.resolve();
-    
 };
 
 const refreshToken = (): Promise<string> =>

@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import AuthHandler from './AuthHandler';
 
 ReactDOM.render(
     <React.StrictMode>
-        <App />
+        <AuthHandler/>
     </React.StrictMode>,
     document.getElementById('root')
 );
