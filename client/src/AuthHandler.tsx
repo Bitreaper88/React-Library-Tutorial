@@ -6,30 +6,28 @@ import {API_URL} from './constants';
 import {IUser} from "./types";
 import Profile from './Profile';
 import jwt from "jsonwebtoken";
-import {setAccessToken, removeAccessToken, getAccessToken} from './utils';
+import {saveAccessTokenToLocalStorage, removeAccessTokenFromLocalStorage, loadAccessTokenFromLocalStorage} from './utils';
 import App from "./App";
 
 const fetchProfile = async (id: string): Promise<IUser> => fetch(`${API_URL}/user/${id}`, {
     headers: {
-        "Authorization": `Bearer ${getAccessToken()}`
+        "Authorization": `Bearer ${loadAccessTokenFromLocalStorage()}`
     },
     credentials: "include"
 })
     .then(response => response.status === 200 ? response.json() : null)
     .catch(err => console.log(err));
 
-function AuthHandler() {
+const AuthHandler = () => {
     const {login, logout, refreshToken} = useAuthContext();
     const [authenticated, setAuthenticated] = useState(false);
-    const [token, setToken] = useState<string|null>(getAccessToken());
+    const [token, setToken] = useState<string|null>(loadAccessTokenFromLocalStorage());
     const [user, setUser] = useState<IUser|null>(null);
     const [refreshInterval, setRefreshInterval] = useState<NodeJS.Timeout|null>(null)
 
     const userId = useMemo(() => {
         if (token) {
-            const { id } = jwt.decode(token, {
-                json: true
-            }) as {id: string};
+            const { id } = jwt.decode(token, {json: true}) as {id: string};
             return id;
         }
         return null;
@@ -40,7 +38,7 @@ function AuthHandler() {
         setAuthenticated(false);
         setRefreshInterval(null);
         setUser(null);
-        removeAccessToken();
+        removeAccessTokenFromLocalStorage();
     }
     
     useEffect(() => {
@@ -59,33 +57,36 @@ function AuthHandler() {
 
 
     useEffect(() => {
-        console.log(token, refreshInterval)
+        //refreshes access token every ten minutes
+        const tenMinutesInMilliseconds = 1000 * 60 * 10;
+        console.log(token, refreshInterval);
         if (token && refreshInterval === null) {
-            const interval = setInterval(() => refreshToken().then(token => {
-                setAccessToken(token)
-                setToken(token)
-            })
+            const interval = setInterval(() => refreshToken()
+                .then(token => {
+                    saveAccessTokenToLocalStorage(token);
+                    setToken(token);
+                })
                 .catch(err => {
-                    console.log(err)
+                    console.log(err);
                     clearState();
-                }), 1000 * 60 * 10)
+                }), tenMinutesInMilliseconds)
             setRefreshInterval(interval)
         }
     }, [refreshInterval, refreshToken, token]);
 
     useEffect(() => {
         refreshToken().then(token => {
-            setAccessToken(token)
-            setToken(token)
+            saveAccessTokenToLocalStorage(token);
+            setToken(token);
         }).catch(err => {
-            console.log("Token not valid or expired. Login to get access.", err);
+            console.log("Token is not valid or it has expired. Login to get access.", err);
             clearState();
         })
     }, [refreshToken])
 
     useEffect(() => {
         if (refreshInterval !== null && token === null) {
-            clearInterval(refreshInterval)
+            clearInterval(refreshInterval);
         }
     }, [refreshInterval, token])
 
