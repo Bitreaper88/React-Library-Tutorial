@@ -6,6 +6,7 @@ import {API_URL} from './constants';
 import {IUser} from "./types";
 import Profile from './Profile';
 import jwt from "jsonwebtoken";
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import {setAccessToken, removeAccessToken, getAccessToken} from './utils';
 
 const fetchProfile = async (id: string): Promise<IUser> => fetch(`${API_URL}/user/${id}`, {
@@ -107,23 +108,29 @@ function App() {
             token,
             user
         }}>
-            <div className="App">
-                <header>
-                    <h1>
-                    Library application!
-                    </h1>
-                </header>
-                <nav>
-                </nav>
-                <main>
-                    {!authenticated ? 
-                        <Login login={login} setToken={setToken}/> : 
-                        <button onClick={onLogoutClick}>Logout</button>}
-                    {authenticated && <Profile user={user} />}
-                </main>
-                <footer>
-                </footer>
-            </div>
+            <Router>
+                <div className="App">
+                    <header>
+                        <h1>
+                        Library
+                        </h1>
+                        <br/>
+                        <Link to="/search"> Search </Link>
+                        <Link to="/signup"> Sign up </Link>
+                        <Link to="/login"> Login </Link>
+                    </header>
+                    <nav>
+                    </nav>
+                    <main>
+                        {!authenticated ? 
+                            <Login login={login} setToken={setToken}/> : 
+                            <button onClick={onLogoutClick}>Logout</button>}
+                        {authenticated && <Profile user={user} />}
+                    </main>
+                    <footer>
+                    </footer>
+                </div>
+            </Router>
         </AuthContext.Provider>
     );
 }
