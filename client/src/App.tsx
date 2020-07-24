@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Link, Route, Redirect } from 'react-router-dom';
 import { Login } from './Login';
@@ -23,15 +23,15 @@ const App: React.FC<IApp> = (props) => {
         setToken
     } = props;
 
-    const [modalVisible, setModalVisible] = useState<VisibleModal>(null);
+    const [visibleModal, setVisibleModal] = useState<VisibleModal>(null);
     const [redirectToPage, setRedirectToPage] = useState<RedirectToPage>(null);
 
     const setModal = (modalValue: VisibleModal) => 
         (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
             event.preventDefault();
-            modalVisible === modalValue ?
-                setModalVisible(null) :
-                setModalVisible(modalValue);
+            visibleModal === modalValue ?
+                setVisibleModal(null) :
+                setVisibleModal(modalValue);
         };
 
     return (
@@ -76,22 +76,18 @@ const App: React.FC<IApp> = (props) => {
                             </div>
                         )}/>
                     </main>
-                    {
-                        modalVisible === "login" &&
-                        <Login
-                            login={login}
-                            setToken={setToken}
-                            setModalVisible={setModalVisible}
-                            setRedirectToPage={setRedirectToPage}
-                        />
-                    }
-                    {
-                        modalVisible === "signup"  &&
-                        <Signup
-                            setModalVisible={setModalVisible}
-                            setRedirectToPage={setRedirectToPage}
-                        />
-                    }
+                    <Login
+                        login={login}
+                        setToken={setToken}
+                        visible={visibleModal === "login" ? true : false}
+                        setVisibleModal={setVisibleModal}
+                        setRedirectToPage={setRedirectToPage}
+                    />
+                    <Signup
+                        visible={visibleModal === "signup" ? true : false}
+                        setVisibleModal={setVisibleModal}
+                        setRedirectToPage={setRedirectToPage}
+                    />
                     <footer>
                     </footer>
                     {redirectToPage && <Redirect to={redirectToPage}/>}

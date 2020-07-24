@@ -1,3 +1,13 @@
+.LoginSignupModal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+}
+
 .Login {
     display: flex;
     flex-flow: column nowrap;
@@ -9,14 +19,14 @@
 }
 
 .Login > div {
-  margin: 8px;
+    margin: 8px;
 }
 
 .Login > form {
-  display: flex;
-  flex-flow: column wrap;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    justify-content: center;
 }
 
 .Login > form > div {

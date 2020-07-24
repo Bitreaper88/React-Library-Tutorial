@@ -1,12 +1,17 @@
 import React, {useState, ChangeEvent} from "react";
+import Modal from "react-modal";
 import "./Login.css";
 import { VisibleModal, RedirectToPage } from "./App";
 import { API_URL } from "./constants";
 
 interface ISignupProps {
-    setModalVisible: (val: VisibleModal) => void;
+    visible: boolean;
+    setVisibleModal: (val: VisibleModal) => void;
     setRedirectToPage: (val: RedirectToPage) => void;
 }
+
+// Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
+Modal.setAppElement('#root')
 
 //export type LoginFn = (email: string, password: string) => Promise<Response>;
 const signup = (name: string, email: string, password: string) => fetch(`${API_URL}/user`, {
@@ -19,7 +24,7 @@ const signup = (name: string, email: string, password: string) => fetch(`${API_U
 });
 
 export const Signup: React.FC<ISignupProps> = props => {
-    const {setModalVisible, setRedirectToPage } = props;
+    const {visible, setVisibleModal, setRedirectToPage } = props;
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -32,7 +37,7 @@ export const Signup: React.FC<ISignupProps> = props => {
             .then(response => {
                 console.log(response)
                 if (response.status === 200) { //successful login!
-                    setModalVisible(null);
+                    setVisibleModal(null);
                     setRedirectToPage("signupsuccessful");
                     return response.json();
                 }
@@ -60,25 +65,32 @@ export const Signup: React.FC<ISignupProps> = props => {
     }
 
     return (
-        <div className="Login">
-            <h2>Signup</h2>
-            <form onSubmit={onSignupClick}>
-            <div>
-                    <label>Name:</label>
-                    <input type="text" id="name" name="name" onChange={onNameChange} />
-                </div>  
+        <Modal
+            isOpen={visible}
+            className="LoginSignupModal"
+            onRequestClose={()=>setVisibleModal(null)}
+            contentLabel="Login Modal"
+        >
+            <div className="Login">
+                <h2>Signup</h2>
+                <form onSubmit={onSignupClick}>
                 <div>
-                    <label>Email:</label>
-                    <input type="text" id="email" name="email" onChange={onEmailChange} />
-                </div>  
-                <div>
-                    <label>Password:</label>
-                    <input type="password" id="password" name="password" onChange={onPasswordChange} />
-                </div>
-                <div>
-                    <input type="submit" />
-                </div>
-            </form>
-        </div>
+                        <label>Name:</label>
+                        <input type="text" id="name" name="name" onChange={onNameChange} />
+                    </div>  
+                    <div>
+                        <label>Email:</label>
+                        <input type="text" id="email" name="email" onChange={onEmailChange} />
+                    </div>  
+                    <div>
+                        <label>Password:</label>
+                        <input type="password" id="password" name="password" onChange={onPasswordChange} />
+                    </div>
+                    <div>
+                        <input type="submit" />
+                    </div>
+                </form>
+            </div>
+        </Modal>
     )
 }

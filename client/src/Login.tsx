@@ -1,4 +1,5 @@
 import React, {useState, ChangeEvent} from "react";
+import Modal from "react-modal";
 import "./Login.css";
 import {saveAccessTokenToLocalStorage} from "./utils";
 import { VisibleModal, RedirectToPage } from "./App";
@@ -6,12 +7,23 @@ import { VisibleModal, RedirectToPage } from "./App";
 interface ILoginProps {
     login: (email: string, password: string) => Promise<Response>;
     setToken: (token: string | null) => void;
-    setModalVisible: (val: VisibleModal) => void;
+    setVisibleModal: (val: VisibleModal) => void;
+    visible: boolean;
     setRedirectToPage: (val: RedirectToPage) => void;
 }
 
+// Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
+Modal.setAppElement('#root')
+  
+
 export const Login: React.FC<ILoginProps> = props => {
-    const {login, setToken, setModalVisible, setRedirectToPage } = props;
+    const {
+        login,
+        setToken,
+        setVisibleModal,
+        visible,
+        setRedirectToPage
+    } = props;
     const [formData, setFormData] = useState({
         email: "",
         password: ""
@@ -23,7 +35,7 @@ export const Login: React.FC<ILoginProps> = props => {
             .then(response => {
                 console.log(response)
                 if (response.status === 200) { //successful login!
-                    setModalVisible(null);
+                    setVisibleModal(null);
                     setRedirectToPage("mypage");
                     return response.json();
                 }
@@ -50,21 +62,28 @@ export const Login: React.FC<ILoginProps> = props => {
     }
 
     return (
-        <div className="Login">
-            <h2>Login</h2>
-            <form onSubmit={onLoginClick}>
-                <div>
-                    <label>Email:</label>
-                    <input type="text" id="email" name="email" onChange={onEmailChange} />
-                </div>  
-                <div>
-                    <label>Password:</label>
-                    <input type="password" id="password" name="password" onChange={onPasswordChange} />
-                </div>
-                <div>
-                    <input type="submit" />
-                </div>
-            </form>
-        </div>
+        <Modal
+            isOpen={visible}
+            className="LoginSignupModal"
+            onRequestClose={()=>setVisibleModal(null)}
+            contentLabel="Login Modal"
+        >
+            <div className="Login">
+                <h2>Login</h2>
+                <form onSubmit={onLoginClick}>
+                    <div>
+                        <label>Email:</label>
+                        <input type="text" id="email" name="email" onChange={onEmailChange} />
+                    </div>  
+                    <div>
+                        <label>Password:</label>
+                        <input type="password" id="password" name="password" onChange={onPasswordChange} />
+                    </div>
+                    <div>
+                        <input type="submit" />
+                    </div>
+                </form>
+            </div>
+        </Modal>
     )
 }
