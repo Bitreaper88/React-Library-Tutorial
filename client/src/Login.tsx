@@ -5,10 +5,12 @@ import {setAccessToken} from "./utils";
 interface ILoginProps {
     login: (email: string, password: string) => Promise<Response>;
     setToken: (token: string | null) => void;
+    setLoginUIVisible: (val: boolean) => void;
+    setRedirectToMyPage: (val: boolean) => void;
 }
 
 export const Login: React.FC<ILoginProps> = props => {
-    const { login, setToken } = props;
+    const {login, setToken, setLoginUIVisible, setRedirectToMyPage } = props;
     const [formData, setFormData] = useState({
         email: "",
         password: ""
@@ -19,8 +21,12 @@ export const Login: React.FC<ILoginProps> = props => {
         return login(formData.email, formData.password)
             .then(response => {
                 console.log(response)
-                if (response.status === 200)
-                    return response.json()
+                if (response.status === 200) { //successful login!
+                    setLoginUIVisible(false);
+                    setRedirectToMyPage(true);
+                    return response.json();
+                }
+
                 return null;
             })
             .then(data => {

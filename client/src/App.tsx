@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
-import { BrowserRouter as Router, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Link, Route, Redirect } from 'react-router-dom';
 import { Login } from './Login';
 import { LoginFn } from './AuthContext';
 
@@ -19,34 +19,51 @@ const App: React.FC<IApp> = (props) => {
         setToken
     } = props;
 
+    const [LoginUIVisible, setLoginUIVisible] = useState<boolean>(false);
+    const [redirectToMyPage, setRedirectToMyPage] = useState<boolean>(false);
     return (
         <div>
             <Router>
                 <div className="App">
                     <header>
-                        <h1>
-                        Library
-                        </h1>
-                        <br/>
-                        <Link to="/search"> Search </Link>
-                        <Link to="/signup"> Sign up </Link>
+                        <Link to="/searchpage"> Search </Link>
                         {
                             userIsAuthenticated ?
-                            <a onClick={onLogoutClick}>Logout</a> :
-                            <Link to="/login"> Login </Link>
+                            <Link to="/mypage"> My page </Link> :
+                            <Link to="/signup"> Sign up </Link>
+                        }
+                        {
+                            userIsAuthenticated ?
+                            <a href="/#" onClick={onLogoutClick}> Logout </a> :
+                            <a href="/#" onClick={() => setLoginUIVisible(!LoginUIVisible)}> Login </a>
                         }
                     </header>
                     <nav>
                     </nav>
                     <main>
-                        jeaap
+                        <Route exact path="/mypage" render={()=>(
+                            <div>
+                                mypage
+                            </div>
+                        )}/>
+                        <Route exact path="/searchpage" render={()=>(
+                            <div>
+                                srch
+                            </div>
+                        )}/>
                     </main>
                     {
-                        !userIsAuthenticated &&
-                        <Login login={login} setToken={setToken}/>
+                        LoginUIVisible &&
+                        <Login
+                            login={login}
+                            setToken={setToken}
+                            setLoginUIVisible={setLoginUIVisible}
+                            setRedirectToMyPage={setRedirectToMyPage}
+                        />
                     }
                     <footer>
                     </footer>
+                    {redirectToMyPage && <Redirect to='/mypage' />}
                 </div>
             </Router>
         </div>

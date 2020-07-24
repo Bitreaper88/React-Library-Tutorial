@@ -107,15 +107,12 @@ function AuthHandler() {
             token,
             user
         }}>
-            {authenticated ? 
-                <App 
-                    userIsAuthenticated={authenticated} 
-                    login={login}
-                    onLogoutClick={onLogoutClick}
-                    setToken={setToken}
-                /> :
-                <Login login={login} setToken={setToken}/>}
-            {authenticated && <Profile user={user} />}
+            <App 
+                userIsAuthenticated={authenticated} 
+                login={login}
+                onLogoutClick={onLogoutClick}
+                setToken={setToken}
+            />
         </AuthContext.Provider>
     );
 }
