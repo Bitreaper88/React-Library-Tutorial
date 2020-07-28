@@ -4,11 +4,13 @@ import { BrowserRouter as Router, Link, Route, Redirect } from 'react-router-dom
 import { Login } from './Login';
 import { LoginFn } from './AuthContext';
 import { Signup } from './Signup';
+import { IUser } from './types';
 
 interface IApp {
     userIsAuthenticated: boolean
     onLogoutClick: () => void,
     login: LoginFn,
+    user: IUser | null,
     setToken: (value: string|null) => void
 }
 
@@ -19,6 +21,7 @@ const App: React.FC<IApp> = (props) => {
     const { 
         userIsAuthenticated,
         login,
+        user,
         onLogoutClick,
         setToken
     } = props;
@@ -62,7 +65,7 @@ const App: React.FC<IApp> = (props) => {
                         )}/>
                         <Route exact path="/mypage" render={()=>(
                             <div>
-                                Hi Pasi, welcome to librarby
+                                Hi {user?.name}, welcome to librarby
                             </div>
                         )}/>
                         <Route exact path="/signupsuccessful" render={()=>(

@@ -96,7 +96,6 @@ const AuthHandler = () => {
             .catch(err => console.log(err));
     }
 
-
     return (
         <AuthContext.Provider value={{
             authenticated,
@@ -109,6 +108,7 @@ const AuthHandler = () => {
             <App 
                 userIsAuthenticated={authenticated} 
                 login={login}
+                user={user}
                 onLogoutClick={onLogoutClick}
                 setToken={setToken}
             />
