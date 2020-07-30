@@ -5,6 +5,15 @@ import { createRoutes } from "./routes/routes";
 import { setupAuthenticationStrategies } from "./authentication";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { IUser } from "./schemas/User";
+
+ //Alter express User type to match ours. Enables us to use the right type in controllers.
+ //https://github.com/DefinitelyTyped/DefinitelyTyped/issues/23976
+declare global {
+    namespace Express {
+        interface User extends IUser {}
+    }
+}
 
 const app = express();
 
