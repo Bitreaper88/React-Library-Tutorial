@@ -6,6 +6,8 @@ import { setupAuthenticationStrategies } from "./authentication";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { IUser } from "./schemas/User";
+import books_json from "../db/books-dummy.json";
+import { IBook } from "./types";
 
  //Alter express User type to match ours. Enables us to use the right type in controllers.
  //https://github.com/DefinitelyTyped/DefinitelyTyped/issues/23976
@@ -13,7 +15,13 @@ declare global {
     namespace Express {
         interface User extends IUser {}
     }
+    namespace NodeJS {
+        interface Global {
+            books: IBook[]
+        }
+    }
 }
+global.books = books_json as IBook[];
 
 const app = express();
 
@@ -30,7 +38,7 @@ app.use(express.urlencoded({
 app.use(express.json());
 
 app.use("/api", createRoutes());
-app.get("/", (_req, res) => res.send("Hello from the libary server!"));
+app.get("/", (_req, res) => res.send("Hello from the library server!"));
 setupAuthenticationStrategies();
 
 setupDatabase()

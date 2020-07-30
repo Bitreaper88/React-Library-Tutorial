@@ -6,6 +6,7 @@ import { LoginFn } from './AuthContext';
 import { Signup } from './Signup';
 import { IUser } from '../../server/src/types';
 import { Search } from "./Search";
+import { MyPage } from "./MyPage";
 
 interface IApp {
     userIsAuthenticated: boolean
@@ -37,11 +38,6 @@ const App: React.FC<IApp> = (props) => {
                 setVisibleModal(null) :
                 setVisibleModal(modalValue);
         };
-
-    const searchForBook = () => {
-
-    }
-
     return (
         <div>
             <Router>
@@ -68,19 +64,13 @@ const App: React.FC<IApp> = (props) => {
                                 LIBRARBY
                             </div>
                         )}/>
-                        <Route exact path="/mypage" render={()=>(
-                            <div>
-                                Hi {user?.name}, welcome to librarby
-                            </div>
-                        )}/>
+                        <Route exact path="/mypage" render={()=><MyPage user={user}/>}/>
                         <Route exact path="/signupsuccessful" render={()=>(
                             <div>
                                 Signed up successfully!
                             </div>
                         )}/>
-                        <Route exact path="/searchpage" render={()=>(
-                            <Search/>
-                        )}/>
+                        <Route exact path="/searchpage" render={()=><Search/>}/>
                     </main>
                     <Login
                         login={login}
