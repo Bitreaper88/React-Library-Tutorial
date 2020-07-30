@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import User, { IUser } from "../schemas/User";
+import userRoutes from "../routes/userRoutes";
 
 const saveUserIfNotExists = async (user: IUser) =>
     User.findOne({ email: user.email })

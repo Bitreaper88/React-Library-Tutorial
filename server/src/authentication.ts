@@ -10,7 +10,7 @@ const JWTStrategy = passportJWT.Strategy;
 const ExtractJwt = passportJWT.ExtractJwt;
 
 // LocalStrategy is used to check that user has provided correct password for logging in.
-const localStartegy = new LocalStrategy({
+const localStrategy = new LocalStrategy({
     usernameField: "email",
     passwordField: "password"
 }, (email, password, done) => {
@@ -94,7 +94,7 @@ export const authenticate = (req: Request, res: Response): Promise<IUser> =>
 
 export const setupAuthenticationStrategies = (): void => {
     passport.initialize();  
-    passport.use(localStartegy);
+    passport.use(localStrategy);
     passport.use(jwtStrategy);
     passport.use("refresh", refreshStrategy); 
 };
