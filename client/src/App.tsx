@@ -4,7 +4,8 @@ import { BrowserRouter as Router, Link, Route, Redirect } from 'react-router-dom
 import { Login } from './Login';
 import { LoginFn } from './AuthContext';
 import { Signup } from './Signup';
-import { IUser } from './types';
+import { IUser } from '../../server/src/types';
+import { Search } from "./Search";
 
 interface IApp {
     userIsAuthenticated: boolean
@@ -36,6 +37,10 @@ const App: React.FC<IApp> = (props) => {
                 setVisibleModal(null) :
                 setVisibleModal(modalValue);
         };
+
+    const searchForBook = () => {
+
+    }
 
     return (
         <div>
@@ -74,9 +79,7 @@ const App: React.FC<IApp> = (props) => {
                             </div>
                         )}/>
                         <Route exact path="/searchpage" render={()=>(
-                            <div>
-                                Search for books.......
-                            </div>
+                            <Search/>
                         )}/>
                     </main>
                     <Login

@@ -1,6 +1,6 @@
 import {createContext, useContext} from "react";
 import {API_URL} from "./constants";
-import {IUser} from "./types";
+import {IUser} from "../../server/src/types";
 
 interface IAuthContext {
     authenticated: boolean;

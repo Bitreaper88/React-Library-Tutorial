@@ -2,24 +2,7 @@ import { Request, Response } from "express";
 import User, { IUser } from "../schemas/User";
 import books_json from "../../db/books-dummy.json";
 import fs from "fs";
-
-interface ICopy {
-    home_library: string,
-    id: string,
-    status: "borrowed" | "in_library",
-    borrower_id: string | null,
-    due_date: string | null,
-}
-interface IBook {
-    isbn: string,
-    title: string,
-    author: string,
-    published: string,
-    publisher: string,
-    pages: number,
-    description: string,
-    copies: ICopy[],
-}
+import { IBook } from "../types";
 
 const books = books_json as IBook[];
 
@@ -31,6 +14,22 @@ export const getBook = async (
     const book = books.find((book) => book.isbn === isbn);
     return book ? 
         res.status(200).send(book) : 
+        res.status(404).send({ error: "notfound" });
+};
+
+const findBook = (search: string | undefined) => (book: IBook) => 
+    search && 
+    (book.title.toLowerCase().includes(search.toLowerCase()) || 
+    book.author.toLowerCase().includes(search.toLowerCase()));
+
+export const searchBooks = async (
+    req: Request,
+    res: Response
+): Promise<Response> => {
+    const search = req.query.search as string | undefined;
+    const found_books = books.filter(findBook(search));
+    return found_books ? 
+        res.status(200).send(found_books) : 
         res.status(404).send({ error: "notfound" });
 };
 
@@ -63,7 +62,6 @@ export const borrowBook = async (
         });
         return res.status(200).send(book_copy);
     }
-
 };
 
 export const returnBook = async (
