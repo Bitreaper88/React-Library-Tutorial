@@ -52,7 +52,7 @@ export const borrowBook = async (
             .status(404)
             .send({ error: "not eligible for borrowing", status: book_copy.status });
     } else {
-        book_copy.borrower_id = req.user._id;
+        book_copy.borrower_id = req.user.id;
         book_copy.status = "borrowed";
         book_copy.due_date = "two weeks from now :D";
         //if this is not done, the library state is only stored when server is running
@@ -80,7 +80,7 @@ export const returnBook = async (
             .send({ error: "notfound" });
     } else if (
         book_copy.status !== "borrowed" && 
-        book_copy.borrower_id !== usr._id
+        book_copy.borrower_id !== usr.id
     ) {
         return res
             .status(404)

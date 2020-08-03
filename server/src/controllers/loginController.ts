@@ -13,10 +13,10 @@ const setRefreshCookie = (res: Response, refreshToken: string) =>
     });
 
 const createToken = ( user: IUser ) => ({
-    token: jwt.sign({ id: user._id }, process.env.SECRET_KEY || "SECRET_KEY", {
+    token: jwt.sign({ id: user.id }, process.env.SECRET_KEY || "SECRET_KEY", {
         expiresIn: AT_EXPIRATION_TIME
     }),
-    refreshToken: jwt.sign({ id: user._id }, REFRESH_SECRET, {
+    refreshToken: jwt.sign({ id: user.id }, REFRESH_SECRET, {
         expiresIn: RT_EXPIRATION_TIME
     })
 });

@@ -4,6 +4,7 @@ import passportJWT from "passport-jwt";
 import User, { IUser } from "./schemas/User";
 import { secretOrKey, REFRESH_SECRET } from "./constants";
 import { Request, Response } from "express";
+import { createSalt, createHash } from "./schemas/utils";
 
 const LocalStrategy = passportLocal.Strategy;
 const JWTStrategy = passportJWT.Strategy;
@@ -14,12 +15,20 @@ const localStrategy = new LocalStrategy({
     usernameField: "email",
     passwordField: "password"
 }, (email, password, done) => {
-    User.findOne({ email })
+    User.findOne(email, undefined)
         .then(async user => {
             if (!user)
                 return done(null, false);
-            const isMatch = await user.comparePassword(password);
-            return isMatch && done(null, user);
+
+            
+            // const salt = createSalt();
+            // const hash = createHash(password, salt);
+            const isMatch: boolean = await user.comparePassword(password);
+            // console.log("ISMATCH", isMatch, user.password, hash)
+
+            return isMatch ? 
+                done(null, user) :
+                done(null, false);
         })
         .catch(err => done(err));
 });
@@ -30,9 +39,11 @@ const jwtStrategy = new JWTStrategy({
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey 
 }, (payload, done) => {
+    console.log("TÄÄL", payload.sub, payload);
     // eslint-disable-next-line
-    User.findOne({ id: payload.sub })
+    User.findOne(undefined, payload.id)
         .then(user => {
+            console.log("USER", user);
             if (user)
                 return done(null, user);
         
@@ -56,7 +67,7 @@ const refreshStrategy = new JWTStrategy(
         secretOrKey: REFRESH_SECRET
     }, (payload, done) => {
         // eslint-disable-next-line
-        User.findOne({ id: payload.sub })
+        User.findOne(undefined, payload.sub)
             .then(user => {
                 if (user)
                     return done(null, user);
@@ -82,8 +93,9 @@ export const authenticate = (req: Request, res: Response): Promise<IUser> =>
     new Promise((resolve, reject) => {
     // eslint-disable-next-line
     passport.authenticate("local", { session: false }, (err: Error, user: IUser) => {
-            if (!user)
+            if (!user) {
                 reject(new Error("Wrong username or password!"));
+            }
             if(err)
                 reject(err);
             if(user) 

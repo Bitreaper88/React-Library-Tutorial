@@ -33,10 +33,6 @@ app.use("/api", createRoutes());
 app.get("/", (_req, res) => res.send("Hello from the libary server!"));
 setupAuthenticationStrategies();
 
-setupDatabase()
-    .then(() => console.log("Database setup completed!!"))
-    .catch(err => console.log(err));
-
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
 });
