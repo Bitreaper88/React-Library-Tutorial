@@ -1,36 +1,35 @@
 import { Request, Response } from "express";
 import User, { IUser } from "../schemas/User";
-import books_json from "../../db/books-dummy.json";
 import fs from "fs";
-
-interface ICopy {
-    home_library: string,
-    id: string,
-    status: "borrowed" | "in_library",
-    borrower_id: string | null,
-    due_date: string | null,
-}
-interface IBook {
-    isbn: string,
-    title: string,
-    author: string,
-    published: string,
-    publisher: string,
-    pages: number,
-    description: string,
-    copies: ICopy[],
-}
-
-const books = books_json as IBook[];
+import { IBook } from "../types";
+//const books = global.books; books_json as IBook[];
 
 export const getBook = async (
     req: Request,
     res: Response
 ): Promise<Response> => {
     const { isbn } = req.params;
+    const books = global.books;
     const book = books.find((book) => book.isbn === isbn);
     return book ? 
         res.status(200).send(book) : 
+        res.status(404).send({ error: "notfound" });
+};
+
+const findBook = (search: string | undefined) => (book: IBook) => 
+    search && 
+    (book.title.toLowerCase().includes(search.toLowerCase()) || 
+    book.author.toLowerCase().includes(search.toLowerCase()));
+
+export const searchBooks = async (
+    req: Request,
+    res: Response
+): Promise<Response> => {
+    const books = global.books;
+    const search = req.query.search as string | undefined;
+    const found_books = books.filter(findBook(search));
+    return found_books ? 
+        res.status(200).send(found_books) : 
         res.status(404).send({ error: "notfound" });
 };
 
@@ -39,6 +38,7 @@ export const borrowBook = async (
     res: Response
 ): Promise<Response> => {
     const { isbn, id } = req.params;
+    const books = global.books;
     const book = books.find((book) => book.isbn === isbn);
 
     const book_copy = book?.copies?.find((copy) => copy.id === id );
@@ -62,7 +62,6 @@ export const borrowBook = async (
         });
         return res.status(200).send(book_copy);
     }
-
 };
 
 export const returnBook = async (
@@ -71,6 +70,7 @@ export const returnBook = async (
 ): Promise<Response> => {
     const usr = req.user as IUser; //"as IUser" should not be needed, type should already be correct here
     const { isbn, id } = req.params;
+    const books = global.books;
     const book = books.find((book) => book.isbn === isbn);
 
     const book_copy = book?.copies?.find((copy) => copy.id === id );
@@ -99,3 +99,4 @@ export const returnBook = async (
             .send(book_copy);
     }
 }
+

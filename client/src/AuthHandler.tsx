@@ -2,7 +2,7 @@ import React, {useState, useEffect, useMemo} from 'react';
 import './App.css';
 import AuthContext, {useAuthContext} from './AuthContext';
 import {API_URL} from './constants';
-import {IUser} from "./types";
+import {IUser} from "../../server/src/types";
 import jwt from "jsonwebtoken";
 import {saveAccessTokenToLocalStorage, removeAccessTokenFromLocalStorage, loadAccessTokenFromLocalStorage} from './utils';
 import App from "./App";

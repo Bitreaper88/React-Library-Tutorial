@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { postUserHandler, getUserHandler } from "../controllers/userController";
+import { postUserHandler, getUserHandler, listBorrowedBooks } from "../controllers/userController";
 import passport from "passport";
 
 export default (): Router => {
@@ -9,6 +9,11 @@ export default (): Router => {
         "/:userId",
         passport.authenticate("jwt", { session: false }),
         getUserHandler
+    );
+    router.get(
+        "/:userId/books",
+        passport.authenticate("jwt", { session: false }),
+        listBorrowedBooks
     );
     return router;
 };

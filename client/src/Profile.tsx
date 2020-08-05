@@ -1,6 +1,6 @@
 import React from "react";
 import "./Profile.css";
-import {IUser} from "./types";
+import {IUser} from "../../server/src/types";
 
 interface IProfileProps {
     user: IUser | null
