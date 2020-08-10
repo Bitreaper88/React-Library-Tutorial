@@ -20,13 +20,9 @@ const localStrategy = new LocalStrategy({
             if (!user)
                 return done(null, false);
 
-            
-            // const salt = createSalt();
-            // const hash = createHash(password, salt);
             const isMatch: boolean = await user.comparePassword(password);
-            // console.log("ISMATCH", isMatch, user.password, hash)
 
-            return isMatch ? 
+            return isMatch ?
                 done(null, user) :
                 done(null, false);
         })
@@ -37,16 +33,14 @@ const localStrategy = new LocalStrategy({
 // accessToken should only be exchanged with resource server.
 const jwtStrategy = new JWTStrategy({
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey 
+    secretOrKey
 }, (payload, done) => {
-    console.log("TÄÄL", payload.sub, payload);
     // eslint-disable-next-line
-    User.findOne(undefined, payload.id)
+    User.findById(payload.id)
         .then(user => {
-            console.log("USER", user);
             if (user)
                 return done(null, user);
-        
+
             return done(null, false, { message: "Not authorized" });
         })
         .catch(err => done(err));
@@ -60,28 +54,28 @@ const jwtStrategy = new JWTStrategy({
 // https://stackoverflow.com/questions/38986005/what-is-the-purpose-of-a-refresh-token
 const refreshStrategy = new JWTStrategy(
     {
-        jwtFromRequest: req => 
+        jwtFromRequest: req =>
             // eslint-disable-next-line
-             req.cookies.refreshToken
+            req.cookies.refreshToken
         ,
         secretOrKey: REFRESH_SECRET
     }, (payload, done) => {
         // eslint-disable-next-line
-        User.findOne(undefined, payload.sub)
+        User.findById(payload.id)
             .then(user => {
                 if (user)
                     return done(null, user);
-        
+
                 return done(null, false, { message: "Not authorized" });
             })
             .catch(err => done(err));
     });
 
-export const checkRefreshtoken = (req: Request, res: Response): Promise<IUser> => 
-    new Promise((resolve, reject) => 
-    // eslint-disable-next-line
-    passport.authenticate("refresh", { session: false }, (err: Error, user: IUser) => {
-            if (!user) 
+export const checkRefreshtoken = (req: Request, res: Response): Promise<IUser> =>
+    new Promise((resolve, reject) =>
+        // eslint-disable-next-line
+        passport.authenticate("refresh", { session: false }, (err: Error, user: IUser) => {
+            if (!user)
                 reject(new Error("User not found"));
             if (err)
                 reject(err);
@@ -89,24 +83,24 @@ export const checkRefreshtoken = (req: Request, res: Response): Promise<IUser> =
         })(req, res)
     );
 
-export const authenticate = (req: Request, res: Response): Promise<IUser> => 
+export const authenticate = (req: Request, res: Response): Promise<IUser> =>
     new Promise((resolve, reject) => {
-    // eslint-disable-next-line
-    passport.authenticate("local", { session: false }, (err: Error, user: IUser) => {
-            if (!user) {
+        // eslint-disable-next-line
+        passport.authenticate("local", { session: false }, (err: Error, user: IUser) => {
+            if (!user)
                 reject(new Error("Wrong username or password!"));
-            }
-            if(err)
+
+            if (err)
                 reject(err);
-            if(user) 
+            if (user)
                 resolve(user);
-            
+
         })(req, res);
     });
 
 export const setupAuthenticationStrategies = (): void => {
-    passport.initialize();  
+    passport.initialize();
     passport.use(localStrategy);
     passport.use(jwtStrategy);
-    passport.use("refresh", refreshStrategy); 
+    passport.use("refresh", refreshStrategy);
 };
