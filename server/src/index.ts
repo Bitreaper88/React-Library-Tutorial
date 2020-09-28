@@ -1,5 +1,5 @@
 import express from "express";
-import { setupDatabase } from "./database";
+// import { setupDatabase } from "./database";
 import { PORT } from "./constants";
 import { createRoutes } from "./routes/routes";
 import { setupAuthenticationStrategies } from "./authentication";
