@@ -1,10 +1,10 @@
 import passport from "passport";
 import passportLocal from "passport-local";
 import passportJWT from "passport-jwt";
-import User, { IUser } from "./schemas/User";
+import User, { IUser } from "./models/User";
 import { secretOrKey, REFRESH_SECRET } from "./constants";
 import { Request, Response } from "express";
-import { createSalt, createHash } from "./schemas/utils";
+import { createSalt, createHash } from "./models/utils";
 
 const LocalStrategy = passportLocal.Strategy;
 const JWTStrategy = passportJWT.Strategy;

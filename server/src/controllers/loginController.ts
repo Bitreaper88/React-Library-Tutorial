@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import jwt from "jsonwebtoken"; 
 import { AT_EXPIRATION_TIME, REFRESH_SECRET, RT_EXPIRATION_TIME } from "../constants";
 import { authenticate, checkRefreshtoken } from "../authentication";
-import { IUser } from "../schemas/User";
+import { IUser } from "../models/User";
 
 
 const setRefreshCookie = (res: Response, refreshToken: string) => 

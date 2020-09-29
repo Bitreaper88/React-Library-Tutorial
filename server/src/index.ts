@@ -5,7 +5,7 @@ import { createRoutes } from "./routes/routes";
 import { setupAuthenticationStrategies } from "./authentication";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { IUser } from "./schemas/User";
+import { IUser } from "./models/User";
 import books_json from "../db/books-dummy.json";
 import { IBook } from "./types";
 

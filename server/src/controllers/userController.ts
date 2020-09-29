@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import User, { IUser } from "../schemas/User";
+import User, { IUser } from "../models/User";
 import { IBook } from "../types";
 
 const saveUserIfNotExists = async (user: User) =>

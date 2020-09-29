@@ -2,15 +2,13 @@ import { createSalt, createHash } from "./utils";
 import { compare } from "bcrypt";
 import { v1 as uuidv1 } from 'uuid';
 
-interface IUserSchema  {
+export interface IUser {
     id: string;
     name: string;
     password: string;
     email: string;
     comparePassword(passwordToCompare?: string): boolean;
 }
-
-export interface IUser extends IUserSchema {}
 
 class User {
     id: string;
@@ -40,9 +38,9 @@ class User {
 }
 
 const testUser =  new User(
-        "Teppo Testaaja", 
-        "test@buutti.com", 
-        "test"
+    "Teppo Testaaja", 
+    "test@buutti.com", 
+    "test"
 );
 
 //Testuser should have the same id every time as we dont want to change it in postman on every run
@@ -62,8 +60,7 @@ const findOne = async (email: string | undefined, id: string | undefined): Promi
     return user ?
         Promise.resolve(user) :
         Promise.resolve(undefined);
-
-}
+};
 
 const findById = async (id: string): Promise<User> => {
     const user = users.find(user => user.id === id);
@@ -71,7 +68,7 @@ const findById = async (id: string): Promise<User> => {
     return user ?
         Promise.resolve(user) :
         Promise.reject();
-}
+};
 
 async function save (user: User) {
     const alreadyExists = users.find((usr) => usr.email === user.email);
@@ -81,7 +78,7 @@ async function save (user: User) {
 
     users.push(user);
     return user;
-}
+};
 
 User.findAll = findAll;
 User.findOne = findOne;

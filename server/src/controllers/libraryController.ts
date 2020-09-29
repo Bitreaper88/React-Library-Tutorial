@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import User, { IUser } from "../schemas/User";
+import User, { IUser } from "../models/User";
 import fs from "fs";
 import { IBook } from "../types";
 //const books = global.books; books_json as IBook[];
