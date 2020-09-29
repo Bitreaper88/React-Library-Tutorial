@@ -14,13 +14,17 @@ class User {
     id: string;
     name: string;
     email: string;
-    private hash: string; //private only in before compile; NOT AT RUNTIME! If you send this object to JSON.serialize as is, these will be present in the resulting string
+    //private only in before compile; NOT AT RUNTIME! If you send this object to 
+    //JSON.serialize as is, these will be present in the resulting string, which 
+    //might then end up in the frontend.
+    private hash: string; 
     private salt: string; //https://auth0.com/blog/adding-salt-to-hashing-a-better-way-to-store-passwords/
 
     static findAll: () => Promise<User[]>;
     static findOne: (email: string | undefined, id: string | undefined) => Promise<User | undefined>;
     static findById: (id: string) => Promise<User>;
     static save: (user: User) => Promise<User>;
+
 
     constructor(name: string, email: string, password: string) {
         this.id = uuidv1();
@@ -31,6 +35,12 @@ class User {
         this.salt = createSalt();
         this.hash = createHash(rawPw, this.salt);
     };
+
+    toJson = () => JSON.stringify({
+        id: this.id,
+        name: this.name,
+        email: this.email
+    });
 
     comparePassword (otherPw: string): Promise<boolean> {
         return compare(otherPw, this.hash);
