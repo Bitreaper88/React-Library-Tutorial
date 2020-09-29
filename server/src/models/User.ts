@@ -51,33 +51,23 @@ const users = [
 ];
 
 const findAll = async (): Promise<User[]> => {
-    return users;
+    //Write your code here
+    return [];
 };
 
 const findOne = async (email: string | undefined, id: string | undefined): Promise<User | undefined> => {
-    const user = users.find(user => user.email === email || user.id === id);
-
-    return user ?
-        Promise.resolve(user) :
-        Promise.resolve(undefined);
+    //Write your code here
+    return Promise.resolve(undefined);
 };
 
 const findById = async (id: string): Promise<User> => {
-    const user = users.find(user => user.id === id);
-
-    return user ?
-        Promise.resolve(user) :
-        Promise.reject();
+    //Write your code here
+    return Promise.reject();
 };
 
 const save = async (user: User): Promise<User> => {
-    const alreadyExists = users.find((usr) => usr.email === user.email);
-    if(alreadyExists) {
-        return Promise.reject("User already exists");
-    }
-
-    users.push(user);
-    return Promise.resolve(user);
+    //Write your code here
+    return Promise.reject();
 };
 
 User.findAll = findAll;
