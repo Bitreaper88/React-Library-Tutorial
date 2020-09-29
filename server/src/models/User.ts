@@ -70,14 +70,14 @@ const findById = async (id: string): Promise<User> => {
         Promise.reject();
 };
 
-async function save (user: User) {
+const save = async (user: User): Promise<User> => {
     const alreadyExists = users.find((usr) => usr.email === user.email);
     if(alreadyExists) {
         return Promise.reject("User already exists");
     }
 
     users.push(user);
-    return user;
+    return Promise.resolve(user);
 };
 
 User.findAll = findAll;
