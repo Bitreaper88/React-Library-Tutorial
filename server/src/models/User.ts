@@ -72,7 +72,10 @@ const findOne = async (email: string | undefined, id: string | undefined): Promi
 
 const findById = async (id: string): Promise<User> => {
     //Write your code here
-    return Promise.reject();
+    let user = users.find((users: { id: string; }) => users.id ===id);
+    if(user){
+        return user;
+    }else  return Promise.reject("No user found");
 };
 
 const save = async (user: User): Promise<User> => {
