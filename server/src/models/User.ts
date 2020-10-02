@@ -60,27 +60,36 @@ const users = [
     testUser
 ];
 
-const findAll = async (): Promise<User[]> => {
-    //Write your code here
-    return [];
-};
+const findAll = async (): Promise<User[]> => Promise.resolve(users);
 
 const findOne = async (email: string | undefined, id: string | undefined): Promise<User | undefined> => {
-    //Write your code here
-    return Promise.resolve(undefined);
+    if (email) {
+        const foundUser = users.find(user => { return user.email === email; });
+        if (foundUser) return Promise.resolve(foundUser);
+        else return Promise.resolve(undefined);
+    }
+    else if (id) {
+        const foundUser = users.find(user => { return user.id === id; });
+        if (foundUser) return Promise.resolve(foundUser);
+        else return Promise.resolve(undefined);
+    }
+    else return Promise.resolve(undefined);
 };
 
 const findById = async (id: string): Promise<User> => {
-    //Write your code here
-    let user = users.find((users: { id: string; }) => users.id ===id);
-    if(user){
-        return user;
-    }else  return Promise.reject("No user found");
+    const user = users.find(entry => {return entry.id ===id});
+    if(user) return Promise.resolve(user);
+    else return Promise.reject("No user found.");
 };
 
 const save = async (user: User): Promise<User> => {
-    //Write your code here
-    return Promise.reject();
+    try {
+        users.push(user);
+        return Promise.resolve(user);
+    }
+    catch (err){
+        return Promise.reject("Couldn't save new user.");
+    }
 };
 
 User.findAll = findAll;
