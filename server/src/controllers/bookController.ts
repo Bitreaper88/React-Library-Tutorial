@@ -1,4 +1,6 @@
-import { Request, Response } from "express"
+import { Request, Response } from "express";
+//import User, { IUser } from "../models/User";
+//import { IBook } from "../types";
 
 export const searchHandler = async (
     req: Request,
@@ -26,4 +28,14 @@ export const searchHandler = async (
     return hits.length !== 0 ?
         res.status(200).json(hits) :
         res.sendStatus(404);
+}
+
+export const getBookByIsbn = async (
+    req: Request,
+    res: Response
+): Promise<Response> => {
+    const { isbn } = req.params;
+    const found_books = global.books.filter(book => book.isbn === isbn);
+
+    return found_books.length > 0 ? res.status(200).send(found_books) : res.status(404).send({ error: "notfound" }); // ternary operator checks if found books array is longer then 0
 }

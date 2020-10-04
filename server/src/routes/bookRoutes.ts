@@ -2,6 +2,9 @@ import { Router } from "express";
 import { postUserHandler, getUserHandler, listBorrowedBooks } from "../controllers/userController";
 import { searchHandler } from "../controllers/bookController";
 import passport from "passport";
+import { authenticate } from "../authentication";
+
+
 
 export default (): Router => {
     const router = Router();
@@ -13,15 +16,16 @@ export default (): Router => {
     );
 
     router.get(
-        "/books/:isbn",
+        "/:isbn",
+        getBookByIsbn
     );
 
     router.patch(
-        "/books/:isbn/borrow/:id",
+        "/:isbn/borrow/:id",
     );
 
     router.patch(
-        "/books/:isbn/return/:id",
+        "/:isbn/return/:id",
     );
 
     return router;
