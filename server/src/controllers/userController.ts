@@ -22,7 +22,7 @@ export const postUserHandler = async (
         password
     );
     return saveUserIfNotExists(user)
-        .then(() => res.status(200).send(`User ${name} created!`))
+        .then(() => res.status(200).json({user_id: user.id}))
         .catch((err: Error) => res.status(500).send(err.message));
 };
 
