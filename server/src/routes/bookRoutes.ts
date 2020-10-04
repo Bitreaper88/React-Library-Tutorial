@@ -1,15 +1,17 @@
 import { Router } from "express";
 import { postUserHandler, getUserHandler, listBorrowedBooks } from "../controllers/userController";
+import { searchHandler } from "../controllers/bookController";
 import passport from "passport";
 
 export default (): Router => {
     const router = Router();
-    
-    //Search for a book with GET
-    router.get( 
-        "/books/?search=SearchQuery",
-     
+
+    ///books/?search=SearchQuery
+    router.get(
+        "/",
+        searchHandler
     );
+
     router.get(
         "/books/:isbn",
     );
