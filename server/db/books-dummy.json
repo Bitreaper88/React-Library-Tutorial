@@ -21,6 +21,13 @@
                 "status": "in_library",
                 "borrower_id": null,
                 "due_date": null
+            },
+            {
+                "home_library": "Varpaisjärven kunnankirjasto",
+                "id": "3",
+                "status": "borrowed",
+                "borrower_id": "a892a360-d720-11ea-87d0-0242ac130003",
+                "due_date": "2020-10-19T02:55:40.686Z"
             }
         ]
     },
