@@ -5,7 +5,7 @@ import AuthHandler from './AuthHandler';
 
 ReactDOM.render(
     <React.StrictMode>
-        <AuthHandler/>
+        <AuthHandler />
     </React.StrictMode>,
     document.getElementById('root')
 );
