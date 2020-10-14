@@ -9,7 +9,7 @@ export const createRoutes = (): Router => {
     const router = Router();
     router.use("/login", loginRoutes());
     router.use("/user", userRoutes());
-    router.use("/book", bookRoutes());
+    router.use("/books", bookRoutes());
     router.use("/logout", logoutHandler);
     router.get("/refreshToken", refreshTokenHandler);
     return router;

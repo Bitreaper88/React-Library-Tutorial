@@ -42,6 +42,7 @@
   },
   "nodemonConfig": {
     "exec": "ts-node src/index.ts",
-    "ext": "ts,js,json"
+    "ext": "ts,js,json",
+    "ignore": ["db/*"]
   }
 }

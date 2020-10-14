@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import User, { IUser } from "../models/User";
-import { IBook, ICopy } from "../types";
+import { IBook } from "../types";
 
 const saveUserIfNotExists = async (user: User) =>
     User.findOne(user.email, undefined)
