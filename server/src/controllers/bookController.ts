@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import fs from 'fs';
-import { authenticate, checkRefreshtoken } from "../authentication";
-import { IBook, IUser, ICopy } from '../../../server/src/types';
+import { IBook, ICopy } from '../../../server/src/types';
+import path from 'path';
 
 export const searchHandler = async (
     req: Request,
@@ -22,7 +22,9 @@ export const searchHandler = async (
             const { copies, ...restOfTheValues } = book;
             return {
                 ...restOfTheValues,
-                available: copies.find(copy => copy.status === "in_library") ? true : false
+                available: copies.map(copy => {
+                    return {id: copy.id, status: copy.status, home_library: copy.home_library, due_date: copy.due_date};
+                })
             }
         });
 
@@ -40,7 +42,7 @@ export const getBookByIsbn = async (
 
     return found_books.length > 0 ? res.status(200).send(found_books) : res.status(404).send({ error: "notfound" }); // ternary operator checks if found books array is longer then 0
 }
-/*
+/**
 * Handles the borrowing of books
 */
 export const patchBorrow = async (
@@ -55,11 +57,11 @@ export const patchBorrow = async (
     if (!userId) return res.status(500).send("User not found, Try login in again");
     // "borrowed" status is passed to the handler when returning books
     let hits = bookJSONHandler(isbn, id, userId, "borrowed");
-    if (hits) return res.status(200).send(hits);
+    if (hits.length) return res.status(200).send(hits);
     else return res.status(400).send({ error: "invalid operation" });
 }
 
-/*
+/**
 * Handles the returning of books
 */
 export const patchReturn = async (
@@ -74,11 +76,11 @@ export const patchReturn = async (
     if (!userId) return res.status(500).send("User not found, Try login in again");
     // "in_library" status is passed to the handler when returning books
     let hits = bookJSONHandler(isbn, id, userId, "in_library");
-    if (hits) return res.status(200).send(hits);
+    if (hits.length) return res.status(200).send(hits);
     else return res.status(400).send({ error: "invalid operation" });
 }
 
-/*
+/**
 * Gets called form either patchReturn or patchBorrow and finds the desired target from the JSON
 */
 export function bookJSONHandler(isbn: string, id: string, userId: string, status: any)  {
@@ -95,7 +97,7 @@ export function bookJSONHandler(isbn: string, id: string, userId: string, status
     function in_libraryCheck(copies: ICopy[], userId: string, targetStatus: string){
         const copy = copies.find(copy => copy.id === id);
             if (!copy) return status = false;
-            console.log("targetStatus: " + targetStatus); 
+            //console.log("Error! targetStatus: " + targetStatus); 
             if (copy.status !== targetStatus) {
                 statusBoolean = true;
                 return status = saveToJSON(isbn, id, userId, targetStatus);
@@ -106,7 +108,7 @@ export function bookJSONHandler(isbn: string, id: string, userId: string, status
     return hits;
 }
 
-/*
+/**
 * Wirtes the new status to the Dummy JSON file that has been set in bookJSONHandler
 */
 export function saveToJSON(isbn: string, id: string, userId: string, status: any): boolean {
@@ -131,10 +133,11 @@ export function saveToJSON(isbn: string, id: string, userId: string, status: any
         }
     });
     try {
-        fs.writeFileSync("../db/books-dummy.json", JSON.stringify(global.books), 'utf8');
-        console.log('books-dummy.json saved!');
+        fs.writeFileSync(path.join(__dirname, "..", "..", "db", "books-dummy.json"), JSON.stringify(global.books), 'utf8');
+        //console.log('books-dummy.json saved!');
         return true;
     } catch (err) {
+        console.log(err);
         console.log('Error saving to books-dummy.json');
         return false;
     }

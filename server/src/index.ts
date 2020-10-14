@@ -8,10 +8,6 @@ import cookieParser from "cookie-parser";
 import { IUser } from "./models/User";
 import books_json from "../db/books-dummy.json";
 import { IBook } from "./types";
-import { resolveTripleslashReference } from "typescript";
-
-
-import { listBorrowedBooks } from "./controllers/userController";
 
  //Alter express User type to match ours. Enables us to use the right type in controllers.
  //https://github.com/DefinitelyTyped/DefinitelyTyped/issues/23976
