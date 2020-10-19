@@ -4,7 +4,7 @@ import { BrowserRouter as Router, NavLink, Link, Route, Redirect } from 'react-r
 import { LoginFn } from './AuthContext';
 import { IUser } from '../../server/src/types';
 
-// import Home from './Home';
+import Home from './Home';
 // import Search from './Search';
 // import Signup from './Signup';
 // import Login from './Login';
@@ -59,7 +59,11 @@ const App: React.FC<IApp> = (props) => {
                             <NavLink to="/Login" exact className={"navBtn"} activeClassName={"activeLink"}>Login</NavLink>
                         </li>
                     </ul>
-                    {/* <Route exact path="/" component={Home} />
+                    <Route exact path="/" component={Home} />
+                    <div className="footer">
+                        Library Web App group orange 2020
+                    </div>
+                    {/* 
                         <Route path="/Search" component={Search} />
                         <Route path="/Signup" component={Signup} />
                         <Route path="/Login" component={Login} /> */}
