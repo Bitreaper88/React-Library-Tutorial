@@ -5,9 +5,9 @@ import { LoginFn } from './AuthContext';
 import { IUser } from '../../server/src/types';
 
 import Home from './Home';
+import Login from './Login';
 // import Search from './Search';
 // import Signup from './Signup';
-// import Login from './Login';
 
 
 interface IApp {
@@ -56,7 +56,9 @@ const App: React.FC<IApp> = (props) => {
                             <NavLink to="/Signup" exact className={"navBtn"} activeClassName={"activeLink"}>Signup</NavLink>
                         </li>
                         <li>
-                            <NavLink to="/Login" exact className={"navBtn"} activeClassName={"activeLink"}>Login</NavLink>
+                            <Login>
+                                <NavLink to="#" exact className={"navBtn"} >Login</NavLink>
+                            </Login>
                         </li>
                     </ul>
                     <Route exact path="/" component={Home} />
@@ -65,8 +67,7 @@ const App: React.FC<IApp> = (props) => {
                     </div>
                     {/* 
                         <Route path="/Search" component={Search} />
-                        <Route path="/Signup" component={Signup} />
-                        <Route path="/Login" component={Login} /> */}
+                        <Route path="/Signup" component={Signup} /> */}
                 </div>
             </Router>
         </div>
