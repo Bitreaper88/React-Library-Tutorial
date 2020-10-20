@@ -1,4 +1,4 @@
-import React, { createRef, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Modal from 'react-modal'
 import { useAuthContext } from './AuthContext';
 import './Login.css'
