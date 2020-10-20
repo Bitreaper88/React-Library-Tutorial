@@ -5,7 +5,7 @@ import { LoginFn } from './AuthContext';
 import { IUser } from '../../server/src/types';
 
 import Home from './Home';
-// import Search from './Search';
+import Search from './Search';
 // import Signup from './Signup';
 // import Login from './Login';
 
@@ -63,8 +63,8 @@ const App: React.FC<IApp> = (props) => {
                     <div className="footer">
                         Library Web App group orange 2020
                     </div>
+                    <Route path="/Search" component={Search} />
                     {/* 
-                        <Route path="/Search" component={Search} />
                         <Route path="/Signup" component={Signup} />
                         <Route path="/Login" component={Login} /> */}
                 </div>
