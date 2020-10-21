@@ -1,25 +1,26 @@
 import React, { useState } from 'react';
-import './App.css';
 import { BrowserRouter as Router, NavLink, Link, Route, Redirect } from 'react-router-dom';
 import { LoginFn } from './AuthContext';
 import { IUser } from '../../server/src/types';
+import './App.css';
 
 import Home from './Home';
+import SignupModal from './Signup';
+import LoginModal from './Login';
+import MyPage from './MyPage';
+
 // import Search from './Search';
 // import Signup from './Signup';
-// import Login from './Login';
 
 
-interface IApp {
+
+export interface IApp {
     userIsAuthenticated: boolean
     onLogoutClick: () => void,
     login: LoginFn,
     user: IUser | null,
     setToken: (value: string | null) => void
 }
-
-export type VisibleModal = "login" | "signup" | null;
-export type RedirectToPage = "mypage" | "signupsuccessful" | null;
 
 const App: React.FC<IApp> = (props) => {
     const {
@@ -30,16 +31,6 @@ const App: React.FC<IApp> = (props) => {
         setToken
     } = props;
 
-    const [visibleModal, setVisibleModal] = useState<VisibleModal>(null);
-    const [redirectToPage, setRedirectToPage] = useState<RedirectToPage>(null);
-
-    const setModal = (modalValue: VisibleModal) =>
-        (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-            event.preventDefault();
-            visibleModal === modalValue ?
-                setVisibleModal(null) :
-                setVisibleModal(modalValue);
-        };
     return (
         <div>
             <Router>
@@ -53,13 +44,24 @@ const App: React.FC<IApp> = (props) => {
                             <NavLink to="/Search" exact className={"navBtn"} activeClassName={"activeLink"}>Search</NavLink>
                         </li>
                         <li>
-                            <NavLink to="/Signup" exact className={"navBtn"} activeClassName={"activeLink"}>Signup</NavLink>
+                            {/* <NavLink to="/Signup" exact className={"navBtn"} activeClassName={"activeLink"}>Signup</NavLink> */}
+                            <SignupModal />
+                           
                         </li>
-                        <li>
-                            <NavLink to="/Login" exact className={"navBtn"} activeClassName={"activeLink"}>Login</NavLink>
+                        <li> 
+                             {!userIsAuthenticated ? <LoginModal {...props} /> :
+                               <NavLink to="/" exact className={"navBtn"} onClick={onLogoutClick}>Logout</NavLink> }      
                         </li>
+                        <li> 
+                             {userIsAuthenticated &&
+                             <NavLink to="/MyPage" exact className={"navBtn"} activeClassName={"activeLink"}>MyPage</NavLink> }      
+                        </li>
+
+
+
                     </ul>
                     <Route exact path="/" component={Home} />
+                    <Route path="/MyPage" component={MyPage} />
                     <div className="footer">
                         Library Web App group orange 2020
                     </div>
