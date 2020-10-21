@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import AuthContext from './AuthContext';
 import { API_URL } from './constants';
 import './Search.css';
 
@@ -20,6 +21,7 @@ interface IFrontCopy {
 }
 
 function Search() {
+    const { authenticated, token } = useContext(AuthContext);
     const [searchTerm, setSearchTerm] = useState('ulysses');
     const [results, setResults] = useState<IResult[]>([]);
 
@@ -36,6 +38,27 @@ function Search() {
         catch (err) {
             console.log(err);
             setResults([]);
+        }
+    }
+
+    async function borrow(isbn: string, id: string) {
+        try {
+            const resp = await fetch(`${API_URL}/books/${isbn}/borrow/${id}`, {
+                method: "PATCH",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
+                credentials: "include"
+            });
+            if (resp.ok) {
+                console.log('Borrow successful.');
+            }
+            else {
+                console.log('Error. Please try again later.');
+            }
+        }
+        catch (err) {
+            console.log('ERROR!');
         }
     }
 
@@ -56,6 +79,10 @@ function Search() {
                         <div className={"available"}>
                             Status: {result.available.length ? 'available' : 'not available'}
                         </div>
+                        {(result.available.length) &&
+                            <div className={"borrow"}>
+                                <button onClick={() => borrow(result.isbn, result.available[0].id)}>Borrow</button>
+                            </div>}
                     </div>
                 );
             });
