@@ -110,9 +110,10 @@ function Login(props: LoginProps) {
                             <td>
                                 <input
                                     className={"input-box"}
-                                    type="text"
+                                    type="password"
                                     value={pwd}
-                                    onChange={(event) => setPwd(event.target.value)} />
+                                    onChange={(event) => setPwd(event.target.value)} 
+                                />
                             </td>
                         </tr>
                         <tr>
@@ -126,18 +127,14 @@ function Login(props: LoginProps) {
                                     className={"login-button"}
                                     ref={loginButton}
                                     onClick={handleLoginAttempt}
-                                >
-                                    Login
-                                </button>
+                                >Login</button>
                                 <button
                                     className={"login-button"}
                                     onClick={() => {
                                         setMessage('');
                                         setShow(false)
                                     }}
-                                >
-                                    Close
-                                </button>
+                                >Close</button>
                             </td>
                         </tr>
                     </tbody>
