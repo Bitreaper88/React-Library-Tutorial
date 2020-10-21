@@ -51,6 +51,7 @@ function Search() {
                 credentials: "include"
             });
             if (resp.ok) {
+                console.log(resp);
                 console.log('Borrow successful.');
             }
             else {
@@ -77,11 +78,18 @@ function Search() {
                             Description: {result.description}
                         </div>
                         <div className={"available"}>
-                            Status: {result.available.length ? 'available' : 'not available'}
+                            Status: {result.available
+                                .find(copy => copy.status === "in_library") ?
+                                    'available' : 'not available'}
                         </div>
-                        {(result.available.length) &&
+                        {(authenticated && result.available.find(copy => copy.status === "in_library")) &&
                             <div className={"borrow"}>
-                                <button onClick={() => borrow(result.isbn, result.available[0].id)}>Borrow</button>
+                                <button onClick={() => {
+                                    const freeId = result.available
+                                        .find(copy => copy.status === "in_library")?.id;
+                                    if (freeId) borrow(result.isbn, freeId);
+                                    else console.log('Error! Try again later.');
+                                }}>Borrow</button>
                             </div>}
                     </div>
                 );
