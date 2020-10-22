@@ -14,8 +14,8 @@
     width: 50%;
     margin-top: 4px;
     padding: 4px;
-    height: 34px;
-    font-size: 24px;
+    height: 24px;
+    font-size: 18px;
     border: 1px solid #ccc;
     border-radius: 4px;
     resize: none;
@@ -37,7 +37,6 @@
     padding: 10px;
     background-color: lightgray;
     border: 3px outset;
-    border-radius: 5px;
 }
 
 .title {
@@ -50,6 +49,14 @@
 }
 
 .available {
-    font-size: larger;
     font-style: italic;
+}
+
+.borrow-button {
+    height: 25px;
+    width: 75px;
+    background-color: gray;
+    margin-top: 4px;
+    border: 0px;
+    border-radius: 4px;
 }

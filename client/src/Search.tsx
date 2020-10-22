@@ -18,6 +18,7 @@ interface IFrontCopy {
     id: string;
     status: string;
     home_library: string;
+    due_date: string;
 }
 
 function Search() {
@@ -51,7 +52,7 @@ function Search() {
                 credentials: "include"
             });
             if (resp.ok) {
-                console.log(resp);
+                searchForString();
                 console.log('Borrow successful.');
             }
             else {
@@ -77,20 +78,44 @@ function Search() {
                         <div className={"description"}>
                             Description: {result.description}
                         </div>
+                        <br />
                         <div className={"available"}>
-                            Status: {result.available
-                                .find(copy => copy.status === "in_library") ?
-                                    'available' : 'not available'}
+                            Availability:
+                            {result.available
+                                .map(copy => {
+                                    if (copy.status === "in_library") {
+                                        return (
+                                            <div key={result.isbn + copy.id}>
+                                                Copy {copy.id}:&nbsp;
+                                                In library
+                                            </div>
+                                        );
+                                    }
+                                    else if (copy.status === "borrowed") {
+                                        return (
+                                            <div key={result.isbn + copy.id}>
+                                                Copy {copy.id}:&nbsp;
+                                                Borrowed until {(new Date(Date.parse(copy.due_date))).toDateString()}
+                                            </div>
+                                        )
+                                    }
+                                    else return (
+                                        <div key={result.isbn + copy.id}>
+                                            ERROR!
+                                        </div>
+                                    )
+                                })}
                         </div>
                         {(authenticated && result.available.find(copy => copy.status === "in_library")) &&
-                            <div className={"borrow"}>
-                                <button onClick={() => {
+                            <button
+                                className="borrow-button"
+                                onClick={() => {
                                     const freeId = result.available
                                         .find(copy => copy.status === "in_library")?.id;
                                     if (freeId) borrow(result.isbn, freeId);
                                     else console.log('Error! Try again later.');
-                                }}>Borrow</button>
-                            </div>}
+                                }}
+                            >Borrow</button>}
                     </div>
                 );
             });
