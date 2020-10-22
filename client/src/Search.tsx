@@ -103,14 +103,14 @@ function Search() {
                     <label className={"search-label"}>Book Search:</label>
                     <br />
                     <input
-                        className={"search-box"}
+                        id="search-box"
                         type="text"
                         value={searchTerm}
                         onChange={(event) => setSearchTerm(event.target.value)}
                     />
                     <br />
                     <input
-                        className={"search-button"}
+                        id="search-button"
                         type="submit"
                         onClick={(e) => {
                             e.preventDefault();
