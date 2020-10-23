@@ -78,73 +78,71 @@ function Search() {
     }
 
     function ResultsModal() {
-        return (
-            <Modal
-                isOpen={showModal}
-                onRequestClose={() => setShowModal(false)}
-                style={ModalStyle}
-            >
-                {!results.length && <div className="search-message">No results found.</div>}
-                <button className="modal-exit-button" onClick={() => setShowModal(false)}>
-                    Close
-                </button>
+        return (<Modal
+            isOpen={showModal}
+            onRequestClose={() => setShowModal(false)}
+            style={ModalStyle}>
 
-                {results
-                    .map(result => {
-                        return (
-                            <div className={"results"} key={result.isbn}>
-                                <div className={"title"}>
-                                    {result.title}
-                                </div>
-                                <div className={"author"}>
-                                    Author: {result.author}
-                                </div>
-                                <div className={"description"}>
-                                    Description: {result.description}
-                                </div>
-                                <br />
-                                <div className={"available"}>
-                                    Availability:
-                            {result.available
-                                        .map(copy => {
-                                            if (copy.status === "in_library") {
-                                                return (
-                                                    <div key={result.isbn + copy.id}>
-                                                        Copy {copy.id}:&nbsp;
-                                                In library
-                                                    </div>
-                                                );
-                                            }
-                                            else if (copy.status === "borrowed") {
-                                                return (
-                                                    <div key={result.isbn + copy.id}>
-                                                        Copy {copy.id}:&nbsp;
-                                                Borrowed until {(new Date(Date.parse(copy.due_date))).toDateString()}
-                                                    </div>
-                                                )
-                                            }
-                                            else return (
-                                                <div key={result.isbn + copy.id}>
-                                                    ERROR!
-                                                </div>
-                                            )
-                                        })}
-                                </div>
-                                {(authenticated && result.available.find(copy => copy.status === "in_library")) &&
-                                    <button
-                                        className="borrow-button"
-                                        onClick={() => {
-                                            const freeId = result.available
-                                                .find(copy => copy.status === "in_library")?.id;
-                                            if (freeId) borrow(result.isbn, freeId);
-                                            else alert('Error! Try again later.');
-                                        }}
-                                    >Borrow</button>}
-                            </div>
-                        );
-                    })}
-            </Modal>
-        )
+            <div className={"results"}>
+                <div className="results-header">
+                    {!results.length && <div className="search-message">No results found.</div>}
+
+                    <button className="modal-exit-button" onClick={() => setShowModal(false)}>
+                        Close
+                        </button>
+                </div>
+
+                {results.map(result => {
+                    return (<div className={"result"} key={result.isbn}>
+
+                        <div className={"title"}>
+                            {result.title}
+                        </div>
+
+                        <div className={"author"}>
+                            Author: {result.author}
+                        </div>
+
+                        <div className={"description"}>
+                            Description: {result.description}
+                        </div>
+
+                        <div className={"available"}>
+                            Availability:
+                                {result.available.map(copy => {
+                            if (copy.status === "in_library") {
+                                return (<div key={result.isbn + copy.id}>
+                                    Copy {copy.id}:&nbsp;
+                                    In library
+                                </div>);
+                            }
+                            else if (copy.status === "borrowed") {
+                                return (<div key={result.isbn + copy.id}>
+                                    Copy {copy.id}:&nbsp;
+                                    Borrowed until {(new Date(Date.parse(copy.due_date))).toDateString()}
+                                </div>);
+                            }
+                            else return (<div key={result.isbn + copy.id}>
+                                ERROR!
+                            </div>);
+                        })}
+                        </div>
+
+                        {(authenticated && result.available.find(copy => copy.status === "in_library")) &&
+                            <button
+                                className="borrow-button"
+                                onClick={() => {
+                                    const freeId = result.available
+                                        .find(copy => copy.status === "in_library")?.id;
+                                        
+                                    if (freeId) borrow(result.isbn, freeId);
+                                    else alert('Error! Try again later.');
+                                }}
+                            >Borrow</button>}
+                    </div>);
+                })}
+            </div>
+        </Modal>)
     }
 
     return (
