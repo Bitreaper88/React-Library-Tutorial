@@ -23,7 +23,7 @@ interface IFrontCopy {
 
 function Search() {
     const { authenticated, token } = useContext(AuthContext);
-    const [searchTerm, setSearchTerm] = useState('ulysses');
+    const [searchTerm, setSearchTerm] = useState('');
     const [results, setResults] = useState<IResult[]>([]);
 
     async function searchForString() {
@@ -53,10 +53,9 @@ function Search() {
             });
             if (resp.ok) {
                 searchForString();
-                console.log('Borrow successful.');
             }
             else {
-                console.log('Error. Please try again later.');
+                alert('Error borrowing the book. Please try again later.');
             }
         }
         catch (err) {
@@ -113,7 +112,7 @@ function Search() {
                                     const freeId = result.available
                                         .find(copy => copy.status === "in_library")?.id;
                                     if (freeId) borrow(result.isbn, freeId);
-                                    else console.log('Error! Try again later.');
+                                    else alert('Error! Try again later.');
                                 }}
                             >Borrow</button>}
                     </div>

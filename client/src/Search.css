@@ -55,8 +55,7 @@
 .borrow-button {
     height: 25px;
     width: 75px;
-    background-color: gray;
+    background-color: lightgray;
     margin-top: 4px;
-    border: 0px;
-    border-radius: 4px;
+    border: 3px outset;
 }
