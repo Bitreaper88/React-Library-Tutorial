@@ -3,6 +3,7 @@ import Modal from 'react-modal';
 import {useHistory } from "react-router-dom";
 import './App.css';
 import {IApp} from "./App";
+import { saveAccessTokenToLocalStorage } from './utils';
 
 
 const customStyles = {
@@ -27,7 +28,8 @@ function LoginModal(props: IApp) {
         login,
         user,
         onLogoutClick,
-        setToken} = props;
+        setToken,
+    } = props;
 
 
     function openModal() {
@@ -64,9 +66,10 @@ function LoginModal(props: IApp) {
             if (resp.ok) {
                 setEmail('');
                 setPwd('');
-                setIsOpen(false);
                 const body = await resp.json();
+                saveAccessTokenToLocalStorage(body.token);
                 setToken(body.token);
+                setIsOpen(false);
                 redirectTo();
                 return;  
             }
@@ -101,12 +104,12 @@ function LoginModal(props: IApp) {
 
                         <div className="row">
                             <label >Email:</label>
-                            <input type="text" id="email" name="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="email"></input>
+                            <input type="text" placeholder="email" value={email} onChange={(event) => setEmail(event.target.value)}></input>
                         </div>
 
                         <div className="row">
                             <label >Password:</label>
-                            <input type="password" id="password" name="password" value={pwd} onChange={(event) => setPwd(event.target.value)} placeholder="Password"></input>
+                            <input type="password" placeholder="Password" value={pwd} onChange={(event) => setPwd(event.target.value)}></input>
                         </div>
                         <p>{message}</p>
                  

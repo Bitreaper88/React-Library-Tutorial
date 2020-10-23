@@ -8,11 +8,7 @@ import Home from './Home';
 import SignupModal from './Signup';
 import LoginModal from './Login';
 import MyPage from './MyPage';
-
-// import Search from './Search';
-// import Signup from './Signup';
-
-
+import Success from './Success';
 
 export interface IApp {
     userIsAuthenticated: boolean
@@ -36,7 +32,8 @@ const App: React.FC<IApp> = (props) => {
             <Router>
                 <div>
                     <ul className="App-header">
-                        {/* <li className="headerText"> Basic navigation </li> */}
+                        {/* {user && <li className="headerText">{user} </li>}       */}
+            
                         <li>
                             <NavLink to="/" exact className={"navBtn"} activeClassName={"activeLink"}>Home</NavLink>
                         </li>
@@ -44,9 +41,7 @@ const App: React.FC<IApp> = (props) => {
                             <NavLink to="/Search" exact className={"navBtn"} activeClassName={"activeLink"}>Search</NavLink>
                         </li>
                         <li>
-                            {/* <NavLink to="/Signup" exact className={"navBtn"} activeClassName={"activeLink"}>Signup</NavLink> */}
-                            <SignupModal />
-                           
+                            {!userIsAuthenticated &&  <SignupModal /> }      
                         </li>
                         <li> 
                              {!userIsAuthenticated ? <LoginModal {...props} /> :
@@ -57,11 +52,10 @@ const App: React.FC<IApp> = (props) => {
                              <NavLink to="/MyPage" exact className={"navBtn"} activeClassName={"activeLink"}>MyPage</NavLink> }      
                         </li>
 
-
-
                     </ul>
                     <Route exact path="/" component={Home} />
-                    <Route path="/MyPage" component={MyPage} />
+                    <Route path="/MyPage" ><MyPage {...props}/></Route>
+                    <Route path="/Success" component={Success} />
                     <div className="footer">
                         Library Web App group orange 2020
                     </div>

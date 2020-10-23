@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import Modal from 'react-modal';
 import { withRouter, useHistory } from "react-router-dom";
 import './App.css';
+import { API_URL } from './constants';
 
 const customStyles = {
     content: {
@@ -30,16 +31,41 @@ function SignupModal() {
         //subtitle.style.color = '#f00';
     }
 
-    // useEffect(() => {
-    //     redirectTo();
-    //   }, []);
-
     function closeModal() {
         setIsOpen(false);
     }
 
     function redirectTo() {
-        history.push('/')
+        setIsOpen(false);
+        history.push('/Success')
+    }
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [pwd, setPwd] = useState('');
+    const [message, setMessage] = useState(' ');
+
+    async function handleSignupAttempt(event:React.FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+
+        try {
+            const resp = await fetch(`${API_URL}/user`, {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json"
+                },
+                body: JSON.stringify({
+                    name: name,
+                    email: email,
+                    password: pwd
+                })
+            });
+            if (resp.ok) {
+                redirectTo();
+            }
+        } 
+        catch (err) {
+            setMessage('Error!');
+        }
     }
       
     return (
@@ -56,25 +82,25 @@ function SignupModal() {
                 <div className="modal-container">
                     {/* <button onClick={closeModal}>close</button> */}
                     <h2> Signup </h2>
-                    <form action="/api/signup">
+                    <form onSubmit={(event) => handleSignupAttempt(event)}>
                         <div className="row">
                             <label >Name:</label>
-                            <input type="text" id="name" name="name" placeholder="Name"></input>
+                            <input type="text" placeholder="Name" value={name} onChange={(event) => setName(event.target.value)}></input>
                         </div>
 
                         <div className="row">
                             <label >Email:</label>
-                            <input type="text" id="email" name="email" placeholder="email"></input>
+                            <input type="text" placeholder="email" value={email} onChange={(event) => setEmail(event.target.value)}></input>
                         </div>
 
                         <div className="row">
                             <label >Password:</label>
-                            <input type="text" id="password" name="password" placeholder="Password"></input>
+                            <input type="password" placeholder="Password" value={pwd} onChange={(event) => setPwd(event.target.value)}></input>
                         </div>
+                        <p>{message}</p>
 
                         <div className="row">
-                            <input type="submit" onClick={redirectTo} value="Submit"></input>
-                            {/* <button onClick={closeModal}>close</button>*/}
+                            <input type="submit" value="Submit" ></input>
                         </div>
 
                     </form>
