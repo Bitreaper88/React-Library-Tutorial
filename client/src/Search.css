@@ -7,28 +7,40 @@
 
 .search-label {
     font-size: x-large;
+    padding: 0px;
 }
 
-.search-box {
+#search-box {
     width: 50%;
-    height: 28px;
-    font-size: 24px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
-
-.search-button {
-    width: 80px;
-    height: 28px;
+    margin-top: 4px;
+    padding: 4px;
+    height: 24px;
     font-size: 18px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: none;
 }
 
-.results {
+#search-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    margin-top: 4px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    float: none;
+}
+
+.result {
     margin-top: 20px;
     padding: 10px;
     background-color: lightgray;
     border: 3px outset;
-    border-radius: 5px;
+}
+
+.search-message {
+    margin-bottom: 4px;
 }
 
 .title {
@@ -41,7 +53,22 @@
 }
 
 .available {
-    font-size: larger;
     font-style: italic;
 }
 
+.borrow-button {
+    height: 25px;
+    width: 75px;
+    background-color: lightgray;
+    margin-top: 4px;
+    border: 3px outset;
+}
+
+.modal-exit-button {
+    margin: 0px;
+    padding: 0px;
+    height: 24px;
+    width: 48px;
+    border: 3px outset;
+    background-color: lightgray;
+}

@@ -5,6 +5,7 @@ import { IUser } from '../../server/src/types';
 import './App.css';
 
 import Home from './Home';
+import Search from './Search';
 import SignupModal from './Signup';
 import LoginModal from './Login';
 import MyPage from './MyPage';
@@ -59,8 +60,8 @@ const App: React.FC<IApp> = (props) => {
                     <div className="footer">
                         Library Web App group orange 2020
                     </div>
+                    <Route path="/Search" component={Search} />
                     {/* 
-                        <Route path="/Search" component={Search} />
                         <Route path="/Signup" component={Signup} />
                         <Route path="/Login" component={Login} /> */}
                 </div>
