@@ -5,9 +5,41 @@
     margin-bottom: 75px;
 }
 
+.results-header{
+    display: flex;
+    flex-direction: row;
+    padding: 15px;
+    width: auto;
+    color: white;
+    background-color: #282c34;
+}
+
+.results-header-text{
+    align-self: stretch;  
+}
+.results-header-corner{
+    margin-left: auto;
+}
+.result-container{
+    width: auto;
+}
 .search-label {
     font-size: x-large;
     padding: 0px;
+}
+
+.result {
+    margin: 10px;
+    margin-top: 20px;
+    border: none;
+    background-color: lightgray;
+}
+
+.result-info {
+    padding: 10px;
+}
+.book-info{
+    margin-right: 15px;
 }
 
 #search-box {
@@ -31,20 +63,20 @@
     float: none;
 }
 
-.result {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: lightgray;
-    border: 3px outset;
-}
-
 .search-message {
     margin-bottom: 4px;
 }
 
-.title {
-    font-size: large;
+.available-status{
+    padding-left: 20px;
+    font-size: smaller;
+}
+
+.resutl-title {
+    font-size: xx-large;
     font-weight: bold;
+    color:  #282c34;
+    margin-bottom: 10px;
 }
 
 .description {
@@ -54,23 +86,54 @@
 .available {
     font-style: italic;
 }
+.copy-row{
+    display: flex;
+    flex-direction: row;
+    padding: 15px;
+    color: white;
+    align-items: center;
+    background-color: #282c34;
+}
+
+.base-row{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
 
 .borrow-button {
-    height: 25px;
-    width: 75px;
-    background-color: lightgray;
-    margin-top: 4px;
-    border: 3px outset;
+    background-color: #4CAF50;
+    color: white;
+    font-size: xx-large;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    margin: auto;
+}
+
+.borrow-button:hover {
+    background-color: dodgerblue;
+    transition: 0.5s;
 }
 
 .modal-exit-button {
     margin: 0px;
     padding: 0px;
-    height: 24px;
+    height: 48px;
     width: 48px;
-    border: 3px outset;
-    background-color: lightgray;
+    border: none;
+    font-size: larger;
+    color: white;
+    background-color:  #f4511e;
 }
+
+.modal-exit-button:hover {
+    background-color:  #e42200;
+    transition: 0.5s;
+}
+
+
 .hero-image2  {
     background-image: url("/book_search.jpg");
     background-color: #cccccc;

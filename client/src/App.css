@@ -18,6 +18,7 @@ body {
 a:hover {
    color: white;
    background-color: cadetblue;
+   transition: 0.5s;
 }
 
 .navBtn {
@@ -44,6 +45,7 @@ ul {
 .activeLink {
   background-color: green;
   color: white;
+  transition: 0.5s;
 }
 
 .rightBtn {
@@ -83,7 +85,7 @@ ul {
 
 .text-container {
   background-color: #2223247c;
-  border-radius: 60px;
+  border-radius: 20px;
   width: 60%;
   height: 60%;
   display: flex;
@@ -177,6 +179,7 @@ input[type=submit] {
 
 input[type=submit]:hover {
   background-color: #45a049;
+  transition: 0.5s;
 }
 .modal-container{
   width: auto;

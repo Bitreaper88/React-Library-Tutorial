@@ -35,8 +35,8 @@ interface IReturnableCopy extends IFrontCopy {
 
 const BookCopies: React.FC<IReturnableCopy> = props => {
 
-    let { home_library, id, status,
-        borrower_id, due_date, isbn
+    let { home_library, id,
+         due_date, isbn
     } = props;
 
     async function retrunUserBooks() {
@@ -79,13 +79,15 @@ const BookCopies: React.FC<IReturnableCopy> = props => {
         <div className={"copie-info"}>
 
             <div className="title">
-                Due date:
-            <div>{date.toLocaleDateString("en-US", options)}</div>
-            </div>
-            <div>
+                Due date:<small> {date.toLocaleDateString("en-US", options)}</small>  
+             </div>
+             <div className="title">
+                Return to: <small> {home_library}</small>
+            </div>   
+            <div className="btnRightContainer">
                 <button className="return-button" onClick={retrunUserBooks}>
                     Return
-            </button>
+                </button>
             </div>
         </div>
     );
@@ -116,11 +118,11 @@ const Book: React.FC<IBookProps> = props => {
                 <div className={"author"}>
                     Author: {author}
                 </div>
-                <div className={"author"}>
+                <small>
                     ISBN: {isbn}
-                </div>
+                </small>
                 <div className={"description"}>
-                    Description: {description}
+                    {description}
                 </div>
             </div>
 
@@ -177,17 +179,6 @@ const MyPage: React.FC<IApp> = (props) => {
 
     }
 
-    function noBook() {
-        if (results.length === 0){
-            return (
-                <div>
-                    No books
-                </div>
-            )
-        }
-      
-    }
-
     useEffect(() => {
         getUserBooks();
     }, []);
@@ -220,7 +211,7 @@ const MyPage: React.FC<IApp> = (props) => {
                 <div>
                     {itemsToRender}
                 </div>
-                {itemsToRender.length >= 0 &&
+                {results.length <= 0 &&
                     <h2 className="centered">
                         You havent borrowed any books yet. Head over to the search tab to borrow some!
                     </h2>
