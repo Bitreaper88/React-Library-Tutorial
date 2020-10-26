@@ -134,7 +134,7 @@ function Search() {
                                 onClick={() => {
                                     const freeId = result.available
                                         .find(copy => copy.status === "in_library")?.id;
-                                        
+
                                     if (freeId) borrow(result.isbn, freeId);
                                     else alert('Error! Try again later.');
                                 }}
@@ -146,28 +146,41 @@ function Search() {
     }
 
     return (
-        <div className={"search-page"}>
+
+
+
+        <div >
+            <div className="hero-image2">
+                <div className="text-container">
+                    <div className="hero-text">
+                        <form onSubmit={searchForString}>
+                            <label className={"search-label"}>Book Search:</label>
+                            <br />
+                            <input
+                                id="search-box"
+                                type="text"
+                                value={searchTerm}
+                                onChange={(event) => setSearchTerm(event.target.value)}
+                            />
+                            <br />
+                            <input
+                                id="search-button"
+                                type="submit"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    searchForString();
+                                }}
+                                value="Search"
+                            />
+                        </form>
+                    </div>
+                </div>
+            </div>
             <div>
-                <form onSubmit={searchForString}>
-                    <label className={"search-label"}>Book Search:</label>
-                    <br />
-                    <input
-                        id="search-box"
-                        type="text"
-                        value={searchTerm}
-                        onChange={(event) => setSearchTerm(event.target.value)}
-                    />
-                    <br />
-                    <input
-                        id="search-button"
-                        type="submit"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            searchForString();
-                        }}
-                        value="Search"
-                    />
-                </form>
+                <blockquote>
+                    <h3>So many books, so little time.</h3>
+                    <footer>-Frank Zappa</footer>
+                </blockquote>
             </div>
             <ResultsModal />
         </div>

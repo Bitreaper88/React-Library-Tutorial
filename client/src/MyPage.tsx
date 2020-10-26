@@ -1,9 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
-import {IApp} from './App';
-import './App.css';
-import './Search.css';
+import { IApp } from './App';
+import './MyPage.css';
 import AuthContext from './AuthContext';
-import {API_URL} from "./constants";
+import { API_URL } from "./constants";
 
 
 interface IResult {
@@ -35,7 +34,8 @@ interface IReturnableCopy extends IFrontCopy {
 }
 
 const BookCopies: React.FC<IReturnableCopy> = props => {
-    let {home_library,  id, status,
+
+    let { home_library, id, status,
         borrower_id, due_date, isbn
     } = props;
 
@@ -48,7 +48,7 @@ const BookCopies: React.FC<IReturnableCopy> = props => {
                 },
                 credentials: "include"
             });
-       
+
             if (resp.ok) {
                 const body = await resp.json();
                 if (body[0].operationValid) {
@@ -67,19 +67,24 @@ const BookCopies: React.FC<IReturnableCopy> = props => {
             console.log(err);
         }
     }
+    const options = {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+        hour: 'numeric', minute: 'numeric', second: 'numeric',
+        hour12: false,
+    };
+    var date = new Date(due_date);
 
-    const {token,user } = useContext(AuthContext);
+    const { token, user } = useContext(AuthContext);
     return (
-        <div className={"results"}>
-            <p>
-            {id}
-            </p>
-            <p>
-            {isbn}
-            </p>
+        <div className={"copie-info"}>
+
+            <div className="title">
+                Due date:
+            <div>{date.toLocaleDateString("en-US", options)}</div>
+            </div>
             <div>
-            <button onClick={retrunUserBooks}>
-                Return
+                <button className="return-button" onClick={retrunUserBooks}>
+                    Return
             </button>
             </div>
         </div>
@@ -87,41 +92,46 @@ const BookCopies: React.FC<IReturnableCopy> = props => {
 }
 
 const Book: React.FC<IBookProps> = props => {
-    let {author, copies, description, 
+    let { author, copies, description,
         isbn, pages, published,
         publisher, title
     } = props;
 
-    const { token,user } = useContext(AuthContext);
+    //  const { token,user } = useContext(AuthContext);
 
     let itemsToRender;
     if (copies.length) {
-      itemsToRender = copies.map((copies: IFrontCopy, index: number) => { 
-        return  (<BookCopies key={index+copies.id} isbn={isbn} {...copies} callBack={props.callBack}/>)
-    })
+        itemsToRender = copies.map((copies: IFrontCopy, index: number) => {
+            return (<BookCopies key={index + copies.id} isbn={isbn} {...copies} callBack={props.callBack} />)
+        })
     } else {
-      itemsToRender = "Loading...";
+        itemsToRender = "Loading...";
     }
 
-    useEffect(() => {
 
-    }, []);
     return (
-        <div className={"results"}>
-            <div className={"title"}>
-                {title}
+        <div className={"borrowed-bookslist"}>
+            <div className="book-info">
+                <div className={"title"}>{title}</div>
+                <div className={"author"}>
+                    Author: {author}
+                </div>
+                <div className={"author"}>
+                    ISBN: {isbn}
+                </div>
+                <div className={"description"}>
+                    Description: {description}
+                </div>
             </div>
-            <div className={"author"}>
-                Author: {author}
+
+            <div>
+
             </div>
-            <div className={"description"}>
-                Description: {description}
+
+            <div>
+                {itemsToRender}
             </div>
-            
-           <div>
-               {itemsToRender}
-           </div>
-    
+
         </div>
     );
 }
@@ -160,13 +170,25 @@ const MyPage: React.FC<IApp> = (props) => {
 
     let itemsToRender;
     if (results) {
-      itemsToRender = results.map((results: IResult, index: number) => { 
-        return  ( 
-                <Book key={index+results.isbn} {...results} callBack={getUserBooks}/>
-                 )
-    })
+        itemsToRender = results.map((results: IResult, index: number) => {
+            return (
+                <Book key={index + results.isbn} {...results} callBack={getUserBooks} />
+            )
+        })
     } else {
-      itemsToRender = "Loading...";
+        itemsToRender = "Loading...";
+
+    }
+
+    function noBook() {
+        if (results.length === 0){
+            return (
+                <div>
+                    No books
+                </div>
+            )
+        }
+      
     }
 
     useEffect(() => {
@@ -177,27 +199,37 @@ const MyPage: React.FC<IApp> = (props) => {
         getUserBooks();
     }, [user]);
 
-    function Foo(){
-        console.log(user);
-        return <span>Bar</span>
-    }
-
     return (
-    <div className="page">          
-        
-        <p>{Foo()}</p>
+        <>  
+            <div className="hero-image3">
+         
+                <div className="text-container">
+                    
+                    <div className="hero-text">
+          
+                    <div id="hello">Hello  {user?.name}</div>
+                    <div> {user?.email} </div>
+                    <div className="text-info">
+                    This is your page where you can review and return books you borrowed.
+                    </div>
+                
+      
+                    </div>
+                </div>
+            </div>
     
-        <p>Hello user:  {user?.name}</p> 
-        
-        <p>{user?.email}</p>
-        <p>{user?.id}</p>
-        
-        My page
-        <div>
-        <h2>Borrowed books: {results.length}</h2>
-        </div>
-        {itemsToRender}
-    </div>
+            <div className="page">
+
+                <div>
+                    {itemsToRender}
+                </div>
+                {itemsToRender.length >= 0 &&
+                    <h2 className="centered">
+                        You havent borrowed any books yet. Head over to the search tab to borrow some!
+                    </h2>
+                }
+            </div>
+        </>
     )
 }
 

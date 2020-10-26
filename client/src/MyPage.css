@@ -1,0 +1,95 @@
+.search-page {
+    margin-top: 2%;
+    margin-left: 4%;
+    margin-right: 4%;
+    margin-bottom: 75px;
+}
+
+.search-label {
+    font-size: x-large;
+    padding: 0px;
+}
+
+.borrowed-bookslist  {
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: lightgray;
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    grid-gap: 10px;
+}
+
+.copie-info{
+    padding: 20px; 
+    padding-bottom: 40px; 
+    background-color: white;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.return-button {
+    float: right;
+    margin: 5px;
+    height: 30px;
+    width: 75px;
+    font-size: medium;
+    color: aliceblue;
+    background-color: brown;
+    border: none
+}
+
+.book-info {
+    grid-row: 1 / span 2;
+  }
+
+.search-message {
+    margin-bottom: 4px;
+}
+
+.title {
+    font-size: large;
+    font-weight: bold;
+}
+#hello{
+    font-size: 50px;
+    font-weight: bold;
+}
+
+.centered{
+    text-align: center;
+}
+
+.hero-image3  {
+background-image: url("/my_page.jpg");
+background-color: #cccccc;
+height: 300px;
+background-position: center;
+background-repeat: no-repeat;
+background-size: cover;
+position: relative;
+}
+  
+.text-info {
+    text-align: center;
+    top: 20%;
+    font-size: larger;
+  }
+
+.description {
+    border-top-style: dotted;
+    margin-top: 10px;
+}
+
+.available {
+    font-style: italic;
+}
+
+
+.modal-exit-button {
+    margin: 0px;
+    padding: 0px;
+    height: 24px;
+    width: 48px;
+    border: 3px outset;
+    background-color: lightgray;
+}

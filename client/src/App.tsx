@@ -41,18 +41,23 @@ const App: React.FC<IApp> = (props) => {
                         <li>
                             <NavLink to="/Search" exact className={"navBtn"} activeClassName={"activeLink"}>Search</NavLink>
                         </li>
-                        <li>
-                            {!userIsAuthenticated &&  <SignupModal /> }      
-                        </li>
-                        <li> 
-                             {!userIsAuthenticated ? <LoginModal {...props} /> :
-                               <NavLink to="/" exact className={"navBtn"} onClick={onLogoutClick}>Logout</NavLink> }      
-                        </li>
                         <li> 
                              {userIsAuthenticated &&
                              <NavLink to="/MyPage" exact className={"navBtn"} activeClassName={"activeLink"}>MyPage</NavLink> }      
                         </li>
 
+                        <div className="topnav-right rightBtn">
+                            <ul className="App-header">
+                                <li>
+                                    {!userIsAuthenticated &&  <SignupModal /> }      
+                                </li>
+                                <li> 
+                                    {!userIsAuthenticated ? <LoginModal {...props} /> :
+                                    <NavLink to="/" exact className={"navBtn"} onClick={onLogoutClick}>Logout</NavLink> }      
+                                </li>
+                            </ul>
+                        </div>
+                     
                     </ul>
                     <Route exact path="/" component={Home} />
                     <Route path="/MyPage" ><MyPage {...props}/></Route>

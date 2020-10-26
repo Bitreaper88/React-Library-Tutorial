@@ -89,7 +89,7 @@ function LoginModal(props: IApp) {
 
     return (
         <div>
-            <a className={"navBtn"} onClick={openModal}>Login</a>
+            <a id="login" className={"navBtn"} onClick={openModal}>Login</a>
             <Modal
                 isOpen={modalIsOpen}
                 onAfterOpen={afterOpenModal}

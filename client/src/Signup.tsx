@@ -71,7 +71,7 @@ function SignupModal() {
     return (
 
         <div>
-            <a className={"navBtn"} onClick={openModal}>Signup</a>
+            <a id="signup" className={"navBtn"} onClick={openModal}>Signup</a>
             <Modal
                 isOpen={modalIsOpen}
                 onAfterOpen={afterOpenModal}
