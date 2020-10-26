@@ -10,12 +10,15 @@
 }
 body {
   margin: 0;
-  font-family: sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height:  1.5;
+  font-size: 20px;
   background-color: white;
 }
 a:hover {
    color: white;
    background-color: cadetblue;
+   transition: 0.5s;
 }
 
 .navBtn {
@@ -31,7 +34,6 @@ a:hover {
 }
 li {
   display: inline;
-
   background-color: transparent;
 }
 
@@ -43,8 +45,17 @@ ul {
 .activeLink {
   background-color: green;
   color: white;
-} 
+  transition: 0.5s;
+}
 
+.rightBtn {
+  font-size: 20px;
+  margin-left: auto;
+}
+
+.topnav-right{
+  float: right;
+}
 
 .hero-image  {
   background-image: url("/library.jpg");
@@ -56,9 +67,25 @@ ul {
   position: relative;
 }
 
+.success {
+  background-color: #282c34;
+  height: 90vh;
+  display:block;
+}
+
+.hero-image4  {
+  background-image: url("/books.jpg");
+  background-color: #cccccc;
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+}
+
 .text-container {
   background-color: #2223247c;
-  border-radius: 60px;
+  border-radius: 20px;
   width: 60%;
   height: 60%;
   display: flex;
@@ -83,6 +110,8 @@ ul {
   font-family: Arial, Helvetica, sans-serif;
   line-height:  1.5;
   font-size: 20px;
+  margin-top: 20px;
+  margin-bottom: 100px;
 }
 
 blockquote {
@@ -116,6 +145,7 @@ color:#889c0b;
   left: 0;
   bottom: 0;
   padding: 20px;
+  height: 10px;
   width: 100%;
   background-color: #282c34;
   color: white;
@@ -149,6 +179,7 @@ input[type=submit] {
 
 input[type=submit]:hover {
   background-color: #45a049;
+  transition: 0.5s;
 }
 .modal-container{
   width: auto;

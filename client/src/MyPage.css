@@ -1,0 +1,96 @@
+.search-page {
+    margin-top: 2%;
+    margin-left: 4%;
+    margin-right: 4%;
+    margin-bottom: 75px;
+}
+
+.search-label {
+    font-size: x-large;
+    padding: 0px;
+}
+
+.borrowed-bookslist  {
+    padding: 15px 0 15px 15px;
+    margin-bottom: 20px;
+    background-color: lightgray;
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    grid-gap: 10px;
+}
+
+.copie-info{
+    padding: 20px; 
+    padding-bottom: 40px; 
+    background-color: white;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+  .btnRightContainer{
+    display: flex;
+    justify-content: flex-end;
+  }
+
+.return-button  {
+    border-radius: 4px;
+    font-size: medium;
+    background-color: #f4511e;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 18px;
+    padding: 10px;
+    width: fit-content;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 5px;
+  }
+  
+  .return-button:hover {
+    background-color:  #e42200;
+    transition: 0.5s;
+  }
+
+
+.book-info {
+    grid-row: 1 / span 2;
+  }
+
+.search-message {
+    margin-bottom: 4px;
+}
+
+.title {
+    font-size: large;
+    font-weight: bold;
+}
+#hello{
+    font-size: 50px;
+    font-weight: bold;
+}
+
+.centered{
+    text-align: center;
+}
+
+.hero-image3  {
+    background-image: url("/my_page.jpg");
+    background-color: #cccccc;
+    height: 300px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+  
+.text-info {
+    text-align: center;
+    top: 20%;
+    font-size: larger;
+  }
+
+.description {
+    border-top-style: dotted;
+    margin-top: 10px;
+    padding-top: 10px;
+}

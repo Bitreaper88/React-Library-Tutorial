@@ -1,9 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
-import {IApp} from './App';
-import './App.css';
-import './Search.css';
+import './MyPage.css';
 import AuthContext from './AuthContext';
-import {API_URL} from "./constants";
+import { API_URL } from "./constants";
+import { IUser } from '../../server/src/types';
 
 
 interface IResult {
@@ -17,10 +16,6 @@ interface IResult {
     title: string;
 }
 
-interface IBookProps extends IResult {
-    callBack: () => Promise<void>;
-}
-
 interface IFrontCopy {
     home_library: string;
     id: string;
@@ -29,14 +24,25 @@ interface IFrontCopy {
     due_date: string
 }
 
-interface IReturnableCopy extends IFrontCopy {
+interface IBookProps extends IResult {
+    callBack: () => Promise<void>;
+}
+
+interface MyPageProps {
+    user: IUser | null;
+}
+
+interface IBookCopiesProps extends IFrontCopy {
     callBack: () => Promise<void>;
     isbn: string;
 }
 
-const BookCopies: React.FC<IReturnableCopy> = props => {
-    let {home_library,  id, status,
-        borrower_id, due_date, isbn
+const BookCopies: React.FC<IBookCopiesProps> = props => {
+
+    const { token } = useContext(AuthContext);
+
+    let { home_library, id,
+        due_date, isbn
     } = props;
 
     async function retrunUserBooks() {
@@ -48,7 +54,7 @@ const BookCopies: React.FC<IReturnableCopy> = props => {
                 },
                 credentials: "include"
             });
-       
+
             if (resp.ok) {
                 const body = await resp.json();
                 if (body[0].operationValid) {
@@ -67,139 +73,153 @@ const BookCopies: React.FC<IReturnableCopy> = props => {
             console.log(err);
         }
     }
+    const options = {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+        hour: 'numeric', minute: 'numeric', second: 'numeric',
+        hour12: false,
+    };
+    var date = new Date(due_date);
 
-    const {token,user } = useContext(AuthContext);
     return (
-        <div className={"results"}>
-            <p>
-            {id}
-            </p>
-            <p>
-            {isbn}
-            </p>
-            <div>
-            <button onClick={retrunUserBooks}>
-                Return
-            </button>
+        <div className={"copie-info"}>
+
+            <div className="title">
+                Due date:<small> {date.toLocaleDateString("en-US", options)}</small>
+            </div>
+            <div className="title">
+                Return to: <small> {home_library}</small>
+            </div>
+            <div className="btnRightContainer">
+                <button className="return-button" onClick={retrunUserBooks}>
+                    Return
+                </button>
             </div>
         </div>
     );
 }
 
 const Book: React.FC<IBookProps> = props => {
-    let {author, copies, description, 
-        isbn, pages, published,
-        publisher, title
+    let { author, copies, description,
+        isbn, title
     } = props;
 
-    const { token,user } = useContext(AuthContext);
-
-    let itemsToRender;
+    let borrowedCopiesToRender;
     if (copies.length) {
-      itemsToRender = copies.map((copies: IFrontCopy, index: number) => { 
-        return  (<BookCopies key={index+copies.id} isbn={isbn} {...copies} callBack={props.callBack}/>)
-    })
+        borrowedCopiesToRender = copies.map((copies: IFrontCopy, index: number) => {
+            return (<BookCopies key={index + copies.id} isbn={isbn} {...copies} callBack={props.callBack} />)
+        })
     } else {
-      itemsToRender = "Loading...";
+        borrowedCopiesToRender = "Loading...";
     }
 
-    useEffect(() => {
-
-    }, []);
     return (
-        <div className={"results"}>
-            <div className={"title"}>
-                {title}
+        <div className={"borrowed-bookslist"}>
+            <div className="book-info">
+                <div className={"title"}>{title}</div>
+                <div className={"author"}>
+                    Author: {author}
+                </div>
+                <small>
+                    ISBN: {isbn}
+                </small>
+                <div className={"description"}>
+                    {description}
+                </div>
             </div>
-            <div className={"author"}>
-                Author: {author}
+
+            <div>
+
             </div>
-            <div className={"description"}>
-                Description: {description}
+
+            <div>
+                {borrowedCopiesToRender}
             </div>
-            
-           <div>
-               {itemsToRender}
-           </div>
-    
+
         </div>
     );
 }
 
-const MyPage: React.FC<IApp> = (props) => {
+const MyPage: React.FC<MyPageProps> = (props) => {
     const user = props.user;
     const { token } = useContext(AuthContext);
     const [results, setResults] = useState<IResult[]>([]);
 
-    //console.log("Results are in: "  + results[0].available[0].due_date);
+    useEffect(onUserUpdate, [user]);
+
+    function onUserUpdate() {
+        getUserBooks();
+    }
 
     async function getUserBooks() {
-        try {
-            console.log("User:" + user?.id);
-            const resp = await fetch(`${API_URL}/user/${user?.id}/books`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                },
-                credentials: "include"
-            });
-            console.log("get Books triggered");
-            if (resp.ok) {
-                setResults(await resp.json());
+        if (user) {
+            try {
+                const resp = await fetch(`${API_URL}/user/${user.id}/books`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    },
+                    credentials: "include"
+                });
+
+                if (resp.ok) {
+                    setResults(await resp.json());
+                }
+                else if (resp.status === 404) {
+                    setResults([]);
+                }
+
             }
-            else if (resp.status === 404) {
+            catch (err) {
+                console.log(err);
                 setResults([]);
             }
-            console.log("Results: " + resp);
-        }
-        catch (err) {
-            console.log(err);
-            setResults([]);
         }
     }
 
-    let itemsToRender;
-    if (results) {
-      itemsToRender = results.map((results: IResult, index: number) => { 
-        return  ( 
-                <Book key={index+results.isbn} {...results} callBack={getUserBooks}/>
-                 )
-    })
-    } else {
-      itemsToRender = "Loading...";
-    }
-
-    useEffect(() => {
-        getUserBooks();
-    }, []);
-
-    useEffect(() => {
-        getUserBooks();
-    }, [user]);
-
-    function Foo(){
-        console.log(user);
-        return <span>Bar</span>
+    function renderBorrowedBooks() {
+        if (results) {
+            return results.map((results: IResult, index: number) => {
+                return (
+                    <Book key={index + results.isbn} {...results} callBack={getUserBooks} />
+                )
+            })
+        } else {
+            return "Loading...";
+        }
     }
 
     return (
-    <div className="page">          
-        
-        <p>{Foo()}</p>
-    
-        <p>Hello user:  {user?.name}</p> 
-        
-        <p>{user?.email}</p>
-        <p>{user?.id}</p>
-        
-        My page
-        <div>
-        <h2>Borrowed books: {results.length}</h2>
-        </div>
-        {itemsToRender}
-    </div>
+        <>
+            <div className="hero-image3">
+
+                <div className="text-container">
+
+                    <div className="hero-text">
+
+                        <div id="hello">Hello  {user?.name}</div>
+                        <div> {user?.email} </div>
+                        <div className="text-info">
+                            This is your page where you can review and return books you borrowed.
+                    </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div className="page">
+
+                <div>
+                    {renderBorrowedBooks()}
+                </div>
+                {results.length <= 0 &&
+                    <h2 className="centered">
+                        You havent borrowed any books yet. Head over to the search tab to borrow some!
+                    </h2>
+                }
+            </div>
+        </>
     )
 }
 
 export default MyPage;
-
