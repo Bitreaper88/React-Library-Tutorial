@@ -141,11 +141,8 @@ const MyPage: React.FC<IApp> = (props) => {
     const { token } = useContext(AuthContext);
     const [results, setResults] = useState<IResult[]>([]);
 
-    //console.log("Results are in: "  + results[0].available[0].due_date);
-
     async function getUserBooks() {
         try {
-            console.log("User:" + user?.id);
             const resp = await fetch(`${API_URL}/user/${user?.id}/books`, {
                 method: "GET",
                 headers: {
@@ -153,14 +150,14 @@ const MyPage: React.FC<IApp> = (props) => {
                 },
                 credentials: "include"
             });
-            console.log("get Books triggered");
+
             if (resp.ok) {
                 setResults(await resp.json());
             }
             else if (resp.status === 404) {
                 setResults([]);
             }
-            console.log("Results: " + resp);
+
         }
         catch (err) {
             console.log(err);
