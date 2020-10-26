@@ -115,7 +115,7 @@
     padding: 12px 20px;
     border: none;
     border-radius: 4px;
-    margin: auto;
+    margin-left: auto;
 }
 
 .borrow-button:hover {
