@@ -1,9 +1,9 @@
-import React, {useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 import Modal from 'react-modal';
-import {useHistory } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import './App.css';
-import {IApp} from "./App";
 import { saveAccessTokenToLocalStorage } from './utils';
+import { LoginFn } from './AuthContext';
 
 
 const customStyles = {
@@ -20,23 +20,22 @@ const customStyles = {
 // Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
 Modal.setAppElement('#root')
 
-function LoginModal(props: IApp) {
+interface LoginProps {
+    login: LoginFn;
+    setToken: (value: string | null) => void;
+}
+
+function LoginModal(props: LoginProps) {
     const [modalIsOpen, setIsOpen] = useState(false);
-    
+
     const {
-        userIsAuthenticated,
         login,
-        user,
-        onLogoutClick,
         setToken,
     } = props;
 
 
     function openModal() {
         setIsOpen(true);
-    }
-
-    function afterOpenModal() {
     }
 
     function closeModal() {
@@ -46,15 +45,14 @@ function LoginModal(props: IApp) {
     function redirectTo() {
         history.push('/MyPage')
     }
-      
+
     let history = useHistory();
     const [email, setEmail] = useState('');
     const [pwd, setPwd] = useState('');
-    const [message, setMessage] = useState(' ');
+    const [message, setMessage] = useState('');
 
     const loginButton = useRef<HTMLInputElement>(null);
 
-    
     async function handleLoginAttempt(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         if (loginButton.current) {
@@ -64,14 +62,13 @@ function LoginModal(props: IApp) {
         try {
             const resp = await login(email, pwd);
             if (resp.ok) {
-                setEmail('');
-                setPwd('');
                 const body = await resp.json();
                 saveAccessTokenToLocalStorage(body.token);
                 setToken(body.token);
-                setIsOpen(false);
+
+                closeModal();
                 redirectTo();
-                return;  
+                return;
             }
             else {
                 setMessage('Wrong Email or Password.');
@@ -89,16 +86,14 @@ function LoginModal(props: IApp) {
 
     return (
         <div>
-            <a className={"navBtn"} onClick={openModal}>Login</a>
+            <NavLink to="#" id="login" className={"navBtn"} onClick={openModal}>Login</NavLink>
             <Modal
                 isOpen={modalIsOpen}
-                onAfterOpen={afterOpenModal}
                 onRequestClose={closeModal}
                 style={customStyles}
-                contentLabel="Login"
-            >
+                contentLabel="Login">
+
                 <div className="modal-container">
-                    {/* <button onClick={closeModal}>close</button> */}
                     <h2> Login </h2>
                     <form onSubmit={(event) => handleLoginAttempt(event)}>
 
@@ -112,13 +107,14 @@ function LoginModal(props: IApp) {
                             <input type="password" placeholder="Password" value={pwd} onChange={(event) => setPwd(event.target.value)}></input>
                         </div>
                         <p>{message}</p>
-                 
+
                         <div className="row">
-                                <input type="submit" value="Login" ref={loginButton}></input>
-                         </div>
-                     
+                            <input type="submit" value="Login" ref={loginButton}></input>
+                        </div>
+
                     </form>
                 </div>
+                
             </Modal>
         </div>
     );

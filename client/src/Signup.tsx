@@ -1,6 +1,6 @@
-import React, { useState} from 'react';
+import React, { useRef, useState } from 'react';
 import Modal from 'react-modal';
-import { withRouter, useHistory } from "react-router-dom";
+import { withRouter, useHistory, NavLink } from "react-router-dom";
 import './App.css';
 import { API_URL } from './constants';
 
@@ -26,11 +26,6 @@ function SignupModal() {
         setIsOpen(true);
     }
 
-    function afterOpenModal() {
-        // references are now sync'd and can be accessed.
-        //subtitle.style.color = '#f00';
-    }
-
     function closeModal() {
         setIsOpen(false);
     }
@@ -42,10 +37,22 @@ function SignupModal() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [pwd, setPwd] = useState('');
-    const [message, setMessage] = useState(' ');
+    const [message, setMessage] = useState('');
 
-    async function handleSignupAttempt(event:React.FormEvent<HTMLFormElement>) {
+    const signupButton = useRef<HTMLInputElement>(null);
+
+    async function handleSignupAttempt(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
+
+        if (!name || !email || !pwd) {
+            setMessage('Error! Please fill out the whole form.');
+            return;
+        }
+
+        if (signupButton.current) {
+            signupButton.current.setAttribute("disabled", "true");
+        }
+
 
         try {
             const resp = await fetch(`${API_URL}/user`, {
@@ -60,27 +67,34 @@ function SignupModal() {
                 })
             });
             if (resp.ok) {
+                setName('');
+                setEmail('');
+                setPwd('');
+                closeModal();
                 redirectTo();
+                return;
             }
-        } 
+        }
         catch (err) {
-            setMessage('Error!');
+            setMessage('Error! Please try again later.');
+        }
+
+        if (signupButton.current) {
+            signupButton.current.removeAttribute("disabled");
         }
     }
-      
+
     return (
 
         <div>
-            <a className={"navBtn"} onClick={openModal}>Signup</a>
+            <NavLink to="#" id="signup" className={"navBtn"} onClick={openModal}>Signup</NavLink>
             <Modal
                 isOpen={modalIsOpen}
-                onAfterOpen={afterOpenModal}
                 onRequestClose={closeModal}
                 style={customStyles}
                 contentLabel="Signup"
             >
                 <div className="modal-container">
-                    {/* <button onClick={closeModal}>close</button> */}
                     <h2> Signup </h2>
                     <form onSubmit={(event) => handleSignupAttempt(event)}>
                         <div className="row">
@@ -100,7 +114,7 @@ function SignupModal() {
                         <p>{message}</p>
 
                         <div className="row">
-                            <input type="submit" value="Submit" ></input>
+                            <input type="submit" ref={signupButton} value="Submit" ></input>
                         </div>
 
                     </form>
