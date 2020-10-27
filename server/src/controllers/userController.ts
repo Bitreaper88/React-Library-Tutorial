@@ -8,7 +8,7 @@ const saveUserIfNotExists = async (user: User) =>
             if (userFound)
                 throw new Error("User already registered!");
             return User.save(user);
-        }).catch((err) => console.log("CATCH"));
+        }).catch((err) => {throw err;});
 
 export const postUserHandler = async (
     req: Request,
@@ -23,7 +23,7 @@ export const postUserHandler = async (
     );
     return saveUserIfNotExists(user)
         .then(() => res.status(200).json({user_id: user.id}))
-        .catch((err: Error) => res.status(500).send(err.message));
+        .catch((err: Error) => res.status(400).send(err.message));
 };
 
 export const getUserHandler = async (
