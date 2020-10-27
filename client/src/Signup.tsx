@@ -49,6 +49,11 @@ function SignupModal() {
             return;
         }
 
+        if (!email.includes('@')) {
+            setMessage('Error! Invalid email.');
+            return;
+        }
+
         if (signupButton.current) {
             signupButton.current.setAttribute("disabled", "true");
         }
@@ -72,6 +77,10 @@ function SignupModal() {
                 setPwd('');
                 closeModal();
                 redirectTo();
+                return;
+            }
+            else if (resp.status === 400){
+                setMessage('User with given email already exists.');
                 return;
             }
         }

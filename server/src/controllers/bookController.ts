@@ -9,13 +9,17 @@ export const searchHandler = async (
 ): Promise<Response> => {
     if (!req.query.search) return res.sendStatus(400);
     const searchQuery = String(req.query.search);
-
+    const multiQuery = searchQuery.split(' ');
+    
     // Search all string-type fields, filter out sensitive data from public search
     const hits = global.books
         .filter(book => {
-            for (const [_key, value] of Object.entries(book)) {
-                if (typeof value === 'string' && value.toLowerCase().includes(searchQuery.toLowerCase())) {
-                    return book;
+            for (const [_key, value] of Object.entries(book)) { 
+                if (typeof value === 'string') {
+                    const matchFound = multiQuery.find(term => {
+                            return value.toLowerCase().includes(term.toLowerCase());
+                        });
+                    if (matchFound) return book;
                 }
             }
         }).map(book => {
