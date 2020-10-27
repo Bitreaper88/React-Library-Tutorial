@@ -106,7 +106,7 @@ function Search() {
                             <div className={"result"} key={result.isbn}>
 
                                 <div className={"result-info"}>
-                                    <div className={"resutl-title"}>
+                                    <div className={"result-title"}>
                                         {result.title}
                                     </div>
                                     <div className="base-row">

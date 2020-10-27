@@ -4,7 +4,7 @@
 
 .App-header {
   background-color: #282c34;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(5px + 2vmin);
   display: flex;
   overflow: hidden;
 }
@@ -111,7 +111,7 @@ ul {
   line-height:  1.5;
   font-size: 20px;
   margin-top: 20px;
-  margin-bottom: 100px;
+  margin-bottom: 80px;
 }
 
 blockquote {
@@ -123,30 +123,28 @@ blockquote {
 }
 
 blockquote h3 {
-font-size:21px;
+font-size: calc(7px + 2vmin);
 }
 
 blockquote h3:before { 
 content: open-quote;
 font-weight: bold;
-font-size: 60px;
+font-size: calc(30px + 2vmin);
 color:#889c0b;
 } 
 blockquote h3:after { 
 content: close-quote;
 font-weight: bold;
-font-size: 60px;
+font-size: calc(30px + 2vmin);
 color:#889c0b;
 
 }
 
 .footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  padding: 20px;
-  height: 10px;
+  position: absolute;
+  padding: 10px;
   width: 100%;
+  font-size: calc(5px + 2vmin);
   background-color: #282c34;
   color: white;
   text-align: center;
