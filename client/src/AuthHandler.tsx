@@ -57,7 +57,7 @@ const AuthHandler = () => {
     useEffect(() => {
         //refreshes access token every ten minutes
         const tenMinutesInMilliseconds = 1000 * 60 * 10;
-        console.log(token, refreshInterval);
+        //console.log(token, refreshInterval);
         if (token && refreshInterval === null) {
             const interval = setInterval(() => refreshToken()
                 .then(token => {
