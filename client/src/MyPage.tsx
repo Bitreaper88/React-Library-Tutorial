@@ -83,10 +83,10 @@ const BookCopies: React.FC<IBookCopiesProps> = props => {
     return (
         <div className={"copie-info"}>
 
-            <div className="title">
+            <div className="copy-label">
                 Due date:<div className="copy-info-field"> {date.toLocaleDateString("en-US", options)}</div>
             </div>
-            <div className="title">
+            <div className="copy-label">
                 Return to: <div className="copy-info-field"> {home_library}</div>
             </div>
             <div className="btnRightContainer">

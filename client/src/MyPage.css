@@ -62,9 +62,16 @@
 }
 
 .title {
+  font-size: calc(10px + 2vmin);
+  font-weight: bold;
+}
+
+.copy-label {
   font-size: calc(3px + 2vmin);
   font-weight: bold;
 }
+
+
 #hello{
   font-size: calc(25px + 2vmin);
     font-weight: bold;
