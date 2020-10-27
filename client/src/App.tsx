@@ -59,12 +59,13 @@ const App: React.FC<IApp> = (props) => {
                      
                     </ul>
                     <Route exact path="/" component={Home} />
-                    <Route path="/MyPage" ><MyPage user={user} /></Route>
+                    <Route path="/MyPage" ><MyPage user={user} />  
+                    </Route>
                     <Route path="/Success" component={Success} />
+                    <Route path="/Search" component={Search} />
                     <div className="footer">
                         Library Web App group orange 2020
                     </div>
-                    <Route path="/Search" component={Search} />
                 </div>
             </Router>
         </div>
