@@ -65,8 +65,10 @@
     font-weight: bold;
 }
 #hello{
-    font-size: 50px;
+    font-size: 35px;
     font-weight: bold;
+    padding: 0;
+    margin: -10px;
 }
 
 .centered{
@@ -86,7 +88,7 @@
 .text-info {
     text-align: center;
     top: 20%;
-    font-size: larger;
+    font-size: 20px;
   }
 
 .description {

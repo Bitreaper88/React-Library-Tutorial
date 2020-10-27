@@ -197,7 +197,7 @@ const MyPage: React.FC<MyPageProps> = (props) => {
                     <div className="hero-text">
 
                         <div id="hello">Hello  {user?.name}</div>
-                        <div> {user?.email} </div>
+                        <div><small> {user?.email}</small> </div>
                         <div className="text-info">
                             This is your page where you can review and return books you borrowed.
                     </div>
